@@ -38,7 +38,7 @@ void workout_window_load(Window *window){
 	timer = text_layer_create(GRect(36, 30, 72, 30));
 	text_layer_set_font(timer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 	text_layer_set_text_alignment(timer, GTextAlignmentCenter);
-	text_layer_set_text(timer, "00");
+	text_layer_set_text(timer, "");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(timer));
 	
 	// sets text layers
@@ -77,14 +77,6 @@ void workout_window_unload(Window *window){
 	inverter_layer_destroy(selected_set_layer);
 	
 	text_layer_destroy(motivation);
-}
-
-/*
- * Drawing procedures
- */
-
-void selected_triangle_drawing_procedure(Layer *layer, GContext *ctx){
-	// TODO: This
 }
 
 /*
@@ -143,14 +135,11 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		}
 	}
 	
-	// Update where the inverter layer is drawn
-	update_working_set_inverter_layer();
-	
-	// Update the timer to properly reflect the time 
-	update_timer();
-	
-	// Update the repetition text to reflect the proper amount of reps completed
-	update_rep_text();
+	// Update all the various layers
+	update_working_set_inverter_layer(); // change the selected set shown
+	update_timer(); // Update the timer to reflect passing a set
+	update_rep_text(); // Update the number of reps on the next set
+	update_motivation_text(); // Update the motivation text
 }
 
 /* Run when a single up click event occurs */
@@ -176,7 +165,8 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 }
 
 void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context){
-	// TODO: Set this up
+	// If the user holds the back button for a long while, then pop this window without saving anything
+	window_stack_pop(true);
 }
 
 /* Updates the current rep text */
@@ -240,6 +230,17 @@ void update_working_set_inverter_layer(){
 	layer_add_child(window_get_root_layer(workout_window), inverter_layer_get_layer(selected_set_layer));
 }
 
+/* Updates the motivation text shown to the user */
+void update_motivation_text(){
+	switch(current_rep_count){
+		case 5:
+		text_layer_set_text(motivation, "Nice job! If it was easy, wait 90 seconds. Otherwise, wait 180.");
+		break;
+		default:
+		text_layer_set_text(motivation, "Failure is part of the game. Wait five minutes.");
+	}
+}
+
 /*
  * Tick Handlers
  */
@@ -247,8 +248,10 @@ void update_working_set_inverter_layer(){
 /* Handles the time updates every second */
 void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	
-	if(timer_running)
+	if(timer_running){
+		timer_count++;
 		update_timer();
+	}
 	
 	// We need to send vibrations for a few different intervals
 	// TODO: Update the motivation text layer
@@ -271,10 +274,18 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 /* Updates the timer */
 void update_timer(){
 	// Create a little buffer
-	static char buffer[] = "000";
+	static char buffer[] = "00:00";
 	
-	// Throw in the number
-	snprintf(buffer, sizeof(buffer), "%i", timer_count++);
+	// calculate the number of seconds and minutes
+	int minutes = timer_count / 60;
+	int seconds = timer_count % 60;
+	
+	
+	// Throw in the elapsed time
+	if(seconds < 10)
+		snprintf(buffer, sizeof(buffer), "%i:0%i", minutes, seconds);
+	else
+		snprintf(buffer, sizeof(buffer), "%i:%i", minutes, seconds);
 	
 	// Set the text up
 	text_layer_set_text(timer, buffer);

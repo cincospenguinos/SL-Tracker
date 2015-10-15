@@ -35,9 +35,6 @@ void workout_window_init(bool);
 void workout_window_load(Window *window);
 void workout_window_unload(Window *window);
 
-/* Drawing procedures */
-void selected_triangle_drawing_procedure(Layer *layer, GContext *ctx);
-
 /* Click functions */
 void workout_window_click_config_provider(Window *window);
 void workout_window_single_up_click(ClickRecognizerRef recognizer, void *context);
@@ -49,6 +46,7 @@ void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context
 /* Layer management functions */
 void update_rep_text();
 void update_working_set_inverter_layer();
+void update_motivation_text();
 
 const char * get_exercise_text();
 
