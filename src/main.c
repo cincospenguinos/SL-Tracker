@@ -7,13 +7,7 @@
 #include "workout_window.h"
 
 void init(){
-	workout_window = window_create();
-	window_set_window_handlers(workout_window, (WindowHandlers){
-		.load = workout_window_load,
-		.unload = workout_window_unload
-	});
-	
-	window_stack_push(workout_window, true);
+	workout_window_init();
 }
 
 void deinit(){
