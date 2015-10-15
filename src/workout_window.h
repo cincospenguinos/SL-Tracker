@@ -12,6 +12,7 @@ Window *workout_window; // the main workout window
 TextLayer *current_exercise; // the workout that is currently being done
 TextLayer *timer; // the timer managing the various sets and reps
 TextLayer *sets[5]; // the collection of sets that are currently being managed
+InverterLayer *selected_set_layer; // the collection of layers that indicate what is the currently selected set
 TextLayer *motivation; // a text layer to provide motivation to the user
 
 // TODO: Setup InverterLayers to indicate what is the current set being worked on
@@ -45,8 +46,9 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context);
 void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context);
 
-/* Text layer management functions */
+/* Layer management functions */
 void update_rep_text();
+void update_working_set_inverter_layer();
 
 const char * get_exercise_text();
 

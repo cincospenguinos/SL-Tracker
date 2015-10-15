@@ -50,6 +50,10 @@ void workout_window_load(Window *window){
 		layer_add_child(window_get_root_layer(window), text_layer_get_layer(sets[i]));
 	}
 	
+	// selected set layer to show what is the current working set
+	selected_set_layer = inverter_layer_create(GRect(12, 80, 16, 20));
+	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(selected_set_layer));
+	
 	// motivation text layer
 	motivation = text_layer_create(GRect(12, 104, 120, 164));
 	text_layer_set_font(motivation, fonts_get_system_font(FONT_KEY_GOTHIC_14));
@@ -66,8 +70,11 @@ void workout_window_unload(Window *window){
 	text_layer_destroy(current_exercise);
 	text_layer_destroy(timer);
 	
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 5; i++){
 		text_layer_destroy(sets[i]);
+	}
+	
+	inverter_layer_destroy(selected_set_layer);
 	
 	text_layer_destroy(motivation);
 }
@@ -119,8 +126,10 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 	if(++current_working_set == 5){
 		current_working_set = 0;
 		current_rep_count = 0;
+		
 		// TODO: Store the data for this exercise away
 		
+		// If we've reached the end of our workout, then we dump everything we have into persistent storage and call it a day
 		if(++current_exercise_index == 3){
 			// TODO: Store the workout and push it to the persistent storage
 			// TODO: Pop off the stack
@@ -131,13 +140,36 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		}
 	}
 	
+	// Update where the inverter layer is drawn
+	update_working_set_inverter_layer();
+	
+	// Update the timer to properly reflect the time 
 	update_timer();
+	
+	// Update the repetition text to reflect the proper amount of reps completed
 	update_rep_text();
 }
 
 /* Run when a single up click event occurs */
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
-	APP_LOG(APP_LOG_LEVEL_INFO, "Back button was pressed");
+	// TODO: Set this up
+	
+	// When a back click is made, then we are moving back to a previous rep
+	if(--current_working_set == -1){
+		current_working_set = 4;
+		
+		// If we are backing completely out of the workout, then we need to pop off this window
+		if (--current_exercise_index == -1){
+			window_stack_pop(true);
+			return;
+		} else {
+			// Otherwise we need to reset the current exercise text
+			text_layer_set_text(current_exercise, get_exercise_text());
+		}
+	}
+	
+	update_working_set_inverter_layer();
+	update_rep_text();
 }
 
 void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context){
@@ -179,6 +211,31 @@ const char * get_exercise_text(){
 	}
 }
 
+/* Moves the inverter layer over depending on what the current working set is */
+void update_working_set_inverter_layer(){
+	// First we will destroy the old layer
+	inverter_layer_destroy(selected_set_layer);
+	
+	// Now we need to figure out where we need to place the layer again
+	switch(current_working_set){
+		case 0:
+			selected_set_layer = inverter_layer_create(GRect(12, 80, 16, 20));
+			break;
+		case 1:
+			selected_set_layer = inverter_layer_create(GRect(40, 80, 16, 20));
+			break;
+		case 2:
+			selected_set_layer = inverter_layer_create(GRect(68, 80, 16, 20));
+			break;
+		case 3:
+			selected_set_layer = inverter_layer_create(GRect(96, 80, 16, 20));
+			break;
+		default:
+			selected_set_layer = inverter_layer_create(GRect(122, 80, 16, 20));
+	}
+	
+	layer_add_child(window_get_root_layer(workout_window), inverter_layer_get_layer(selected_set_layer));
+}
 
 /*
  * Tick Handlers
@@ -189,6 +246,23 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	
 	if(timer_running)
 		update_timer();
+	
+	// We need to send vibrations for a few different intervals
+	// TODO: Update the motivation text layer
+	
+	if(timer_count == 90)
+		vibes_short_pulse();
+	else if (timer_count == 180)
+		vibes_long_pulse();
+	else if (timer_count == 300)
+		vibes_long_pulse();
+	else if (timer_count == 600)
+		vibes_long_pulse();
+	else if(timer_count == 999){
+		timer_count = 0;
+		timer_running = false;
+		vibes_double_pulse();
+	}
 }
 
 /* Updates the timer */
