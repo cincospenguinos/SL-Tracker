@@ -132,7 +132,10 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		// If we've reached the end of our workout, then we dump everything we have into persistent storage and call it a day
 		if(++current_exercise_index == 3){
 			// TODO: Store the workout and push it to the persistent storage
-			// TODO: Pop off the stack
+			
+			// Pop this window off the stack
+			window_stack_pop(true);
+			return;
 		} 
 		
 		else {
