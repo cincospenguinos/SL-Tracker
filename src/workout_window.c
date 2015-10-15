@@ -151,12 +151,15 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 			// Otherwise, we set the text of the current exercise
 			update_exercise_text();
 		}
-	} 
+	}
 	
 	// If the exercise doesn't need to change, then we update the motivation text
 	else {
 		update_motivation_text();
 	}
+	
+	// Set the current_rep_count equal to whatever the next value is
+	current_rep_count = reps_per_exercise[current_exercise_index][current_working_set];
 	
 	// Update all the various layers
 	update_working_set_inverter_layer(); // change the selected set shown
@@ -166,6 +169,9 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 
 /* Run when a single up click event occurs */
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
+	// Store the current rep amount for this set of this exercise away
+	reps_per_exercise[current_exercise_index][current_working_set] = current_rep_count;
+	
 	// If we're on dead lifts, then we need to do some special stuff
 	if(on_deadlifts){
 		current_working_set = 0;
@@ -185,6 +191,9 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 			update_exercise_text();
 		}
 	}
+	
+	// Set the current_rep_count equal to whatever the next value is
+	current_rep_count = reps_per_exercise[current_exercise_index][current_working_set];
 	
 	update_working_set_inverter_layer();
 	update_rep_text();
