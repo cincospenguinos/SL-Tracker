@@ -34,8 +34,15 @@ void workout_window_load(Window *window){
 	text_layer_set_text_alignment(current_exercise, GTextAlignmentCenter);
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(current_exercise));
 	
+	// weight text layer
+	weight_text = text_layer_create(GRect(36, 20, 72, 16));
+	text_layer_set_text(weight_text, "999 lbs");
+	text_layer_set_font(weight_text, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+	text_layer_set_text_alignment(weight_text, GTextAlignmentCenter);
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(weight_text));
+	
 	// timer text layer
-	timer = text_layer_create(GRect(36, 30, 72, 30));
+	timer = text_layer_create(GRect(36, 36, 72, 30));
 	text_layer_set_font(timer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 	text_layer_set_text_alignment(timer, GTextAlignmentCenter);
 	text_layer_set_text(timer, "00:00");
@@ -114,6 +121,12 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 	timer_running = true;
 	timer_count = 0;
 	
+	// If we're on deadlifts, we'll set the current_working set to 4 and call it a day
+	if(on_deadlifts) {
+		current_working_set = 4;
+		on_deadlifts = false;
+	}
+	
 	// Add one to the current working set and check if the exercise needs to change
 	if(++current_working_set == 5){
 		current_working_set = 0;
@@ -133,8 +146,7 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		
 		else {
 			// Otherwise, we set the text of the current exercise
-			void update_exercise_text();
-// 			text_layer_set_text(current_exercise, get_exercise_text());
+			update_exercise_text();
 		}
 	} 
 	
@@ -151,6 +163,11 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 
 /* Run when a single up click event occurs */
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
+	// If we're on dead lifts, then we need to do some special stuff
+	if(on_deadlifts){
+		current_working_set = 0;
+		on_deadlifts = false;
+	}
 	
 	// When a back click is made, then we are moving back to a previous rep
 	if(--current_working_set == -1){
@@ -162,8 +179,7 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 			return;
 		} else {
 			// Otherwise we need to reset the current exercise text
-			void update_exercise_text();
-// 			text_layer_set_text(current_exercise, get_exercise_text());
+			update_exercise_text();
 		}
 	}
 	
@@ -171,6 +187,7 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 	update_rep_text();
 }
 
+/* Runs when a long back click even occurs */
 void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context){
 	// If the user holds the back button for a long while, then pop this window without saving anything
 	window_stack_pop(true);
@@ -255,9 +272,24 @@ void update_motivation_text(){
 
 /* Updates the exercise text */
 void update_exercise_text(){
-	// TODO: Figure out this problem
-	// If we're doing deadlifts we need to do something a little bit special
+	// TODO: Figure out the weight text layer
 	
+	// If it's currently a B day and we're working on deadlifts, we need to do some things
+	if(day_type && current_exercise_index == 2){
+		current_working_set = 2; // First we will need to indicate that the current working set is 2
+		
+		// Set all the sets text layers to be empty
+		text_layer_set_text(sets[0], "");
+		text_layer_set_text(sets[1], "");
+		text_layer_set_text(sets[3], "");
+		text_layer_set_text(sets[4], "");
+		
+		on_deadlifts = true; // Indicate that we are currently working on deadlifts
+	} else {
+		// TODO: Figure this part out - storing the values of the workouts and dumping them back in
+	}
+	
+	text_layer_set_text(current_exercise, get_exercise_text());
 }
 
 /*

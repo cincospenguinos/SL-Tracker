@@ -9,9 +9,8 @@
 /* Instance variables */
 Window *workout_window; // the main workout window
 
-// TODO: Include a weight layer indicating what weight you should be on
-
 TextLayer *current_exercise; // the workout that is currently being done
+TextLayer *weight_text; // the amount of weight for the current exercise
 TextLayer *timer; // the timer managing the various sets and reps
 TextLayer *sets[5]; // the collection of sets that are currently being managed
 InverterLayer *selected_set_layer; // the collection of layers that indicate what is the currently selected set
@@ -27,9 +26,11 @@ int current_working_set; // the current set that the user is working on
 int current_exercise_index; // manages the current exercise
 
 char buffers[5][2]; // An array of buffers to manage the sets text layers
+int reps_per_exercise[3][5]; // An array of integers to manage the number of reps for each set in each exercise
+
+// TODO: Figure out how to store all of the data with the reps and show it back to the user
 
 bool on_deadlifts; // True if the user is currently working on deadlifts
-
 bool failed_set; // True if the user failed a set
 
 /* Initializes and pushes this window */
