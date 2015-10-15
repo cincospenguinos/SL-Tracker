@@ -117,6 +117,9 @@ void workout_window_single_down_click(ClickRecognizerRef recognizer, void *conte
 
 /* Run when a single up click event occurs */
 void workout_window_single_select_click(ClickRecognizerRef recognizer, void *context){
+	// Store the current rep amount for this set of this exercise away
+	reps_per_exercise[current_exercise_index][current_working_set] = current_rep_count;
+	
 	// Ensure that the timer is running and reset the timer
 	timer_running = true;
 	timer_count = 0;
@@ -279,14 +282,21 @@ void update_exercise_text(){
 		current_working_set = 2; // First we will need to indicate that the current working set is 2
 		
 		// Set all the sets text layers to be empty
-		text_layer_set_text(sets[0], "");
-		text_layer_set_text(sets[1], "");
-		text_layer_set_text(sets[3], "");
-		text_layer_set_text(sets[4], "");
+		text_layer_set_text(sets[0], " ");
+		text_layer_set_text(sets[1], " ");
+		text_layer_set_text(sets[3], " ");
+		text_layer_set_text(sets[4], " ");
 		
 		on_deadlifts = true; // Indicate that we are currently working on deadlifts
-	} else {
-		// TODO: Figure this part out - storing the values of the workouts and dumping them back in
+	} 
+	
+	// Otherwise, we're not doing deadlifts and we need to make sure we get the old data and show it
+	else {
+		// Get the old values of this exercise and show them
+		for(int i = 0; i < 5; i++){
+			snprintf(buffers[i], sizeof(buffers[i]), "%i", reps_per_exercise[current_exercise_index][i]);
+			text_layer_set_text(sets[i], buffers[i]);
+		}
 	}
 	
 	text_layer_set_text(current_exercise, get_exercise_text());
