@@ -2,7 +2,10 @@
 #include "workout_window.h"
 	
 /* Creates and pushes this window onto the stack */
-void workout_window_init(){
+void workout_window_init(bool day){
+	// Set the current day_type
+	day_type = day;
+	
 	// Create the window and define the handlers
 	workout_window = window_create();
 	
@@ -25,11 +28,11 @@ void workout_window_init(){
 /* Sets up the workout_window when it loads up on screen */
 void workout_window_load(Window *window){
 	// current_workout text layer
-	current_workout = text_layer_create(GRect(0, 0, 144, 15));
-	text_layer_set_text(current_workout, "Overhead Press");
-	text_layer_set_font(current_workout, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
-	text_layer_set_text_alignment(current_workout, GTextAlignmentCenter);
-	layer_add_child(window_get_root_layer(window), text_layer_get_layer(current_workout));
+	current_exercise = text_layer_create(GRect(0, 0, 144, 15));
+	text_layer_set_text(current_exercise, "Squat");
+	text_layer_set_font(current_exercise, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
+	text_layer_set_text_alignment(current_exercise, GTextAlignmentCenter);
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(current_exercise));
 	
 	// timer text layer
 	timer = text_layer_create(GRect(36, 30, 72, 30));
@@ -60,7 +63,7 @@ void workout_window_load(Window *window){
 
 /* Tears down the workout_window when the window pops off the stack */
 void workout_window_unload(Window *window){
-	text_layer_destroy(current_workout);
+	text_layer_destroy(current_exercise);
 	text_layer_destroy(timer);
 	
 	for(int i = 0; i < 5; i++)
@@ -108,10 +111,28 @@ void workout_window_single_down_click(ClickRecognizerRef recognizer, void *conte
 
 /* Run when a single up click event occurs */
 void workout_window_single_select_click(ClickRecognizerRef recognizer, void *context){
-	// TODO: This
-// 	timer_running = !timer_running;
-	current_working_set++;
+	// Ensure that the timer is running and reset the timer
+	timer_running = true;
+	timer_count = 0;
+	
+	// Add one to the current working set and check if it needs to change
+	if(++current_working_set == 5){
+		current_working_set = 0;
+		current_rep_count = 0;
+		// TODO: Store the data for this exercise away
+		
+		if(++current_exercise_index == 3){
+			// TODO: Store the workout and push it to the persistent storage
+			// TODO: Pop off the stack
+		} 
+		
+		else {
+			text_layer_set_text(current_exercise, get_exercise_text());
+		}
+	}
+	
 	update_timer();
+	update_rep_text();
 }
 
 /* Run when a single up click event occurs */
@@ -128,6 +149,34 @@ void update_rep_text(){
 	// We will use our array of buffers to manage this function
 	snprintf(buffers[current_working_set], sizeof(buffers[current_working_set]), "%i", current_rep_count);
 	text_layer_set_text(sets[current_working_set], buffers[current_working_set]);
+}
+
+/* Returns the proper exercise  */
+const char * get_exercise_text(){
+	
+	// A day
+	if(!day_type){
+		switch(current_exercise_index){
+			case 0:
+				return "Squat";
+			case 1:
+				return "Bench Press";
+			default:
+				return "Bent Rows";
+		}
+	} 
+	
+	// B day
+	else {
+		switch(current_exercise_index){
+			case 0:
+				return "Squat";
+			case 1:
+				return "Overhead Press";
+			default:
+				return "Deadlift";
+		}
+	}
 }
 
 

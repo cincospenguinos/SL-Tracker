@@ -7,7 +7,7 @@
 #include "workout_window.h"
 
 void init(){
-	workout_window_init();
+	workout_window_init(false);
 }
 
 void deinit(){
