@@ -10,6 +10,14 @@
 #define WORKOUT_LOG_COUNT_KEY 1 // The total number of old workouts is located
 #define WORKOUT_LOG_START_KEY 2 // Where the workout log starts
 
+/* Exercise struct definition */
+typedef struct {
+	char *name; // Name of the exercise
+	int *set_values; // Pointer to an array of the sets
+	int weight; // The weight of the exercise
+	bool pounds_or_kilos; // false for pounds, true for kilos
+}Exercise;
+
 /* Workout struct definition */
 typedef struct {
 	bool day_type; // Whether it's an A day or B day

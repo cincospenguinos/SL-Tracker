@@ -28,7 +28,7 @@ void workout_window_init(bool day){
 /* Sets up the workout_window when it loads up on screen */
 void workout_window_load(Window *window){
 	// current_workout text layer
-	current_exercise = text_layer_create(GRect(0, 0, 144, 15));
+	current_exercise = text_layer_create(GRect(0, 0, 144, 20));
 	text_layer_set_text(current_exercise, "Squat");
 	text_layer_set_font(current_exercise, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
 	text_layer_set_text_alignment(current_exercise, GTextAlignmentCenter);
@@ -38,7 +38,7 @@ void workout_window_load(Window *window){
 	timer = text_layer_create(GRect(36, 30, 72, 30));
 	text_layer_set_font(timer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 	text_layer_set_text_alignment(timer, GTextAlignmentCenter);
-	text_layer_set_text(timer, "");
+	text_layer_set_text(timer, "00:00");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(timer));
 	
 	// sets text layers
@@ -58,7 +58,7 @@ void workout_window_load(Window *window){
 	motivation = text_layer_create(GRect(12, 104, 120, 164));
 	text_layer_set_font(motivation, fonts_get_system_font(FONT_KEY_GOTHIC_14));
 	text_layer_set_text_alignment(motivation, GTextAlignmentLeft);
-	text_layer_set_text(motivation, "The quick brown fox jumped over the lazy dog. 63 characters"); // About sixty three characters are able to be dumped into this text layer
+	text_layer_set_text(motivation, "");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(motivation));
 	
 	// add a tick timer to this window
@@ -114,10 +114,11 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 	timer_running = true;
 	timer_count = 0;
 	
-	// Add one to the current working set and check if it needs to change
+	// Add one to the current working set and check if the exercise needs to change
 	if(++current_working_set == 5){
 		current_working_set = 0;
-		current_rep_count = 0;
+		timer_running = false;
+		text_layer_set_text(motivation, "");
 		
 		// TODO: Store the data for this exercise away
 		
@@ -131,20 +132,25 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		} 
 		
 		else {
-			text_layer_set_text(current_exercise, get_exercise_text());
+			// Otherwise, we set the text of the current exercise
+			void update_exercise_text();
+// 			text_layer_set_text(current_exercise, get_exercise_text());
 		}
+	} 
+	
+	// If the exercise doesn't need to change, then we update the motivation text
+	else {
+		update_motivation_text();
 	}
 	
 	// Update all the various layers
 	update_working_set_inverter_layer(); // change the selected set shown
 	update_timer(); // Update the timer to reflect passing a set
 	update_rep_text(); // Update the number of reps on the next set
-	update_motivation_text(); // Update the motivation text
 }
 
 /* Run when a single up click event occurs */
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
-	// TODO: Set this up
 	
 	// When a back click is made, then we are moving back to a previous rep
 	if(--current_working_set == -1){
@@ -156,7 +162,8 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 			return;
 		} else {
 			// Otherwise we need to reset the current exercise text
-			text_layer_set_text(current_exercise, get_exercise_text());
+			void update_exercise_text();
+// 			text_layer_set_text(current_exercise, get_exercise_text());
 		}
 	}
 	
@@ -168,6 +175,10 @@ void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context
 	// If the user holds the back button for a long while, then pop this window without saving anything
 	window_stack_pop(true);
 }
+
+/*
+ * Text Update Functions
+ */
 
 /* Updates the current rep text */
 void update_rep_text(){
@@ -238,7 +249,15 @@ void update_motivation_text(){
 		break;
 		default:
 		text_layer_set_text(motivation, "Failure is part of the game. Wait five minutes.");
+		failed_set = true;
 	}
+}
+
+/* Updates the exercise text */
+void update_exercise_text(){
+	// TODO: Figure out this problem
+	// If we're doing deadlifts we need to do something a little bit special
+	
 }
 
 /*
@@ -253,21 +272,26 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		update_timer();
 	}
 	
-	// We need to send vibrations for a few different intervals
-	// TODO: Update the motivation text layer
+	// We will indicate to the user what's up here
 	
-	if(timer_count == 90)
+	if(timer_count == 90 && !failed_set){
+		text_layer_set_text(motivation, "90 seconds have passed. Move on to your next set.");
 		vibes_short_pulse();
-	else if (timer_count == 180)
+	} else if (timer_count == 180 && !failed_set){
+		text_layer_set_text(motivation, "3 minutes have passed. Move on to your next set.");
 		vibes_long_pulse();
-	else if (timer_count == 300)
+	}	else if (timer_count == 300){
+		failed_set = false;
 		vibes_long_pulse();
-	else if (timer_count == 600)
+		text_layer_set_text(motivation, "5 minutes have passed. Move on to your next set.");
+	} else if (timer_count == 600){
 		vibes_long_pulse();
-	else if(timer_count == 999){
+		text_layer_set_text(motivation, "10 minutes have passed. Move on to your next set.");
+	} else if(timer_count == 999){
 		timer_count = 0;
 		timer_running = false;
 		vibes_double_pulse();
+		text_layer_set_text(motivation, "");
 	}
 }
 
@@ -290,15 +314,3 @@ void update_timer(){
 	// Set the text up
 	text_layer_set_text(timer, buffer);
 }
-
-
-
-
-
-
-
-
-
-
-
-

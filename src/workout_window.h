@@ -9,13 +9,13 @@
 /* Instance variables */
 Window *workout_window; // the main workout window
 
+// TODO: Include a weight layer indicating what weight you should be on
+
 TextLayer *current_exercise; // the workout that is currently being done
 TextLayer *timer; // the timer managing the various sets and reps
 TextLayer *sets[5]; // the collection of sets that are currently being managed
 InverterLayer *selected_set_layer; // the collection of layers that indicate what is the currently selected set
 TextLayer *motivation; // a text layer to provide motivation to the user
-
-// TODO: Setup InverterLayers to indicate what is the current set being worked on
 
 /* Variables to manage the view */
 bool timer_running; // dictates whether or not the timer is running
@@ -26,7 +26,11 @@ int current_rep_count; // the current number of reps the user has listed
 int current_working_set; // the current set that the user is working on
 int current_exercise_index; // manages the current exercise
 
-char buffers[5][3]; // An array of buffers to manage the sets text layers
+char buffers[5][2]; // An array of buffers to manage the sets text layers
+
+bool on_deadlifts; // True if the user is currently working on deadlifts
+
+bool failed_set; // True if the user failed a set
 
 /* Initializes and pushes this window */
 void workout_window_init(bool);
@@ -49,6 +53,7 @@ void update_working_set_inverter_layer();
 void update_motivation_text();
 
 const char * get_exercise_text();
+void update_exercise_text();
 
 /* Time functions */
 void tick_handler(struct tm *tick_time, TimeUnits units_changed);
