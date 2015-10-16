@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "workout_window.h"
+#include "model.h"
 	
 /* Creates and pushes this window onto the stack */
 void workout_window_init(bool day){
@@ -86,6 +87,8 @@ void workout_window_unload(Window *window){
 	
 	inverter_layer_destroy(selected_set_layer);
 	text_layer_destroy(motivation);
+	
+	// TODO: Send the workout created (if one is created) to the model here
 }
 
 /*
