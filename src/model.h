@@ -59,6 +59,9 @@ void delete_workout(int index);
 /* Returns an integer containing the day type and date the workout was created at the index passed */
 int peek_workout(int index);
 
+/* Returns the number of workouts in the model */
+int get_workout_count();
+
 /*
  * Conversion functions - converts ints to structs and back
  */

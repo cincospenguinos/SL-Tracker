@@ -72,8 +72,13 @@ void init(){
 	
 	// Now the tests
 	store_new_workout(workout); // Store a workout
-	Workout other = get_workout(0, other_sets1, other_sets2, other_sets3); // Get the first workout
-	print_all_info(other);
+	store_new_workout(workout); // Store another workout
+	store_new_workout(workout); // Store yet another workout
+	
+	for(int i = 0; i < get_workout_count(); i++){
+		Workout other = get_workout(i, other_sets1, other_sets2, other_sets3);
+		print_all_info(other);
+	}
 	
 	// Destroy everything
 	nuke_all_old_workouts();

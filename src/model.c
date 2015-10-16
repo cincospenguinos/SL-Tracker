@@ -113,6 +113,12 @@ int peek_workout(int index){
 	return 0; // a stub
 }
 
+/* Returns the number of workouts in the model */
+int get_workout_count(){
+	return persist_read_int(WORKOUT_LOG_COUNT_KEY);
+}
+
+
 /*
  * Conversion functions - converts ints to structs and back
  */
@@ -273,7 +279,9 @@ void nuke_all_old_workouts(){
 	persist_delete(WORKOUT_LOG_COUNT_KEY);
 }
 
-
+/*
+ * Various debugging functions
+ */
 
 
 
