@@ -149,12 +149,73 @@ int convert_workout_to_int_typeC(Workout workout){
 }
 
 /* Converts an integer to a workout structure */
-Workout convert_int_to_workout(int workout){
-	// TODO: Implement this
+Workout convert_int_to_workout(int storedA, int storedB, int storedC){
+	// Create the workout, sets, and Exercises
 	Workout result;
 	
+	int ex1_sets[5];
+	int ex2_sets[5];
+	int ex3_sets[5];
 	
-	return result; // a stub
+	Exercise ex1;
+	ex1.name = "Squat"; // Exercise 1 is always squats
+	ex1.reps = ex1_sets;
+	
+	Exercise ex2;
+	ex2.reps = ex2_sets;
+	
+	Exercise ex3;
+	ex3.reps = ex3_sets;
+	
+	// Get all the stuff from storedA
+	result.day_type = (storedA < 0); // If storedA is negative, then it's a B day
+	result.year = ((storedA & 0x8FFFFFFF) >> 23);
+	result.month = ((storedA & 0x007FFFFF) >> 19);
+	result.day = ((storedA & 0x0007FFFF) >> 14);
+	
+	ex1.weight = ((storedA & 0x00003FFF) >> 6) * 5; // Don't forget to multiply by five!
+	ex1.reps[0] = ((storedA & 0x0000003F) >> 3);
+	ex1.reps[1] = (storedA & 0x00000007);
+	
+	// Get all the stuff from storedB
+	ex1.reps[2] = (storedB >> 29);
+	ex1.reps[3] = ((storedB & 0x1FFFFFFF) >> 26);
+	ex1.reps[4] = ((storedB & 0x03FFFFFF) >> 23);
+	
+	ex2.weight = ((storedB & 0x007FFFFF) >> 15) * 5; // Don't forget to multiply by five!
+	
+	ex2.reps[0] = ((storedB & 0x00007FFF) >> 12);
+	ex2.reps[1] = ((storedB & 0x00000FFF) >> 9);
+	ex2.reps[2] = ((storedB & 0x000001FF) >> 6);
+	ex2.reps[3] = ((storedB & 0x0000003F) >> 3);
+	ex2.reps[4] = storedB & 0x00000007;
+	
+	// Get all the stuff from storedC
+	ex3.weight = (storedC >> 24); // Don't forget to multiply by five!
+	
+	ex3.reps[0] = ((storedC & 0x00FFFFFF) >> 21);
+	ex3.reps[1] = ((storedC & 0x001FFFFF) >> 18);
+	ex3.reps[2] = ((storedC & 0x0003FFFF) >> 15);
+	ex3.reps[3] = ((storedC & 0x00007FFF) >> 12);
+	ex3.reps[4] = ((storedC & 0x00000FFF) >> 9);
+	
+	// Setup the last few things in each of the exercises
+	if(!result.day_type){
+		// A day
+		ex2.name = "Bench Press";
+		ex3.name = "Bent Rows";
+	} else {
+		// B day
+		ex2.name = "Overhead Press";
+		ex3.name = "Deadlift";
+	}
+	
+	// Put the exercises into the workout and return it
+	result.exercise1 = ex1;
+	result.exercise2 = ex2;
+	result.exercise3 = ex3;
+	
+	return result;
 }
 
 /* Converts exercise structure to an integer */

@@ -7,6 +7,8 @@
 #include "workout_window.h"
 #include "model.h"
 
+// TODO: Fix the model so that array pointers are dumped into the convert_int_to_workout() function
+
 void init(){
 //	workout_window_init(false);
 	// We will use this as a test method for now
@@ -38,7 +40,7 @@ void init(){
 	
 	// Workout
 	Workout workout;
-	workout.day_type = false; // true means B day; false means A day
+	workout.day_type = true; // true means B day; false means A day
 	workout.year = 115; // Remember: year is counted from 1900
 	workout.month = 10;
 	workout.day = 15;
@@ -47,12 +49,19 @@ void init(){
 	workout.exercise3 = exercise3;
 	
 	// Now the tests
-	int workout_intA = convert_workout_to_int_typeA(workout);
-	int workout_intB = convert_workout_to_int_typeB(workout);
-	int workout_intC = convert_workout_to_int_typeC(workout);
-	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intA: %X", workout_intA);
-	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intB: %X", workout_intB);
-	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intC: %X", workout_intC);
+	Workout other = convert_int_to_workout(convert_workout_to_int_typeA(workout), convert_workout_to_int_typeB(workout), convert_workout_to_int_typeC(workout));
+	APP_LOG(APP_LOG_LEVEL_INFO, "Year: %i", other.year);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Month: %i", other.month);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Day: %i", other.day);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise1.name, i, other.exercise1.reps[i]);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise2.name, i, other.exercise2.reps[i]);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise3.name, i, other.exercise3.reps[i]);
 }
 
 void deinit(){
