@@ -59,6 +59,10 @@ void main_menu_window_load(Window *window){
 /* Called when the main_menu_window unloads */
 void main_menu_window_unload(){
 	simple_menu_layer_destroy(main_menu_layer);
+	
+	// TODO: Figure out how you're going to do this
+	if(workout_window != NULL)
+		window_destroy(workout_window);
 }
 
 /*

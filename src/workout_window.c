@@ -95,6 +95,8 @@ void workout_window_unload(Window *window){
 	inverter_layer_destroy(selected_set_layer);
 	text_layer_destroy(motivation);
 	
+	tick_timer_service_unsubscribe();
+	
 	// TODO: Send the workout created (if one is created) to the model here
 }
 
@@ -209,7 +211,6 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 		
 		// If we are backing completely out of the workout, then we need to pop off this window
 		if (--current_exercise_index == -1){
-			APP_LOG(APP_LOG_LEVEL_INFO, "workout_window popping off the stack");
 			window_stack_pop(true);
 			return;
 		} else {

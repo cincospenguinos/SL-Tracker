@@ -14,6 +14,7 @@ void init(){
 
 void deinit() {
 	window_destroy(main_menu_window);
+	
 	nuke_all_old_workouts(); // TODO: Remove this
 }
 	
