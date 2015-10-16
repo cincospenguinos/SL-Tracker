@@ -69,7 +69,7 @@ int convert_workout_to_int_typeB(Workout workout);
 int convert_workout_to_int_typeC(Workout workout);
 
 /* Converts an integer to a workout structure */
-Workout convert_int_to_workout(int storedA, int storedB, int storedC);
+Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1, int *sets2, int *sets3);
 
 /* Converts exercise structure to an integer */
 int convert_exercise_to_int(Exercise exercise);

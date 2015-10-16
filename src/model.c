@@ -126,7 +126,7 @@ int convert_workout_to_int_typeB(Workout workout){
 	result = (result << 3) + workout.exercise1.reps[4];
 	
 	// put in the weight for the second exercise
-	result = (result << 6) + (workout.exercise2.weight / 5);
+	result = (result << 8) + (workout.exercise2.weight / 5);
 	
 	// put in all of the sets for the second exercise
 	for(int i = 0; i < 5; i++)
@@ -149,27 +149,23 @@ int convert_workout_to_int_typeC(Workout workout){
 }
 
 /* Converts an integer to a workout structure */
-Workout convert_int_to_workout(int storedA, int storedB, int storedC){
+Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1, int *sets2, int *sets3){
 	// Create the workout, sets, and Exercises
 	Workout result;
 	
-	int ex1_sets[5];
-	int ex2_sets[5];
-	int ex3_sets[5];
-	
 	Exercise ex1;
 	ex1.name = "Squat"; // Exercise 1 is always squats
-	ex1.reps = ex1_sets;
+	ex1.reps = sets1;
 	
 	Exercise ex2;
-	ex2.reps = ex2_sets;
+	ex2.reps = sets2;
 	
 	Exercise ex3;
-	ex3.reps = ex3_sets;
+	ex3.reps = sets3;
 	
 	// Get all the stuff from storedA
 	result.day_type = (storedA < 0); // If storedA is negative, then it's a B day
-	result.year = ((storedA & 0x8FFFFFFF) >> 23);
+	result.year = ((storedA & 0x7FFFFFFF) >> 23);
 	result.month = ((storedA & 0x007FFFFF) >> 19);
 	result.day = ((storedA & 0x0007FFFF) >> 14);
 	
@@ -191,7 +187,7 @@ Workout convert_int_to_workout(int storedA, int storedB, int storedC){
 	ex2.reps[4] = storedB & 0x00000007;
 	
 	// Get all the stuff from storedC
-	ex3.weight = (storedC >> 24); // Don't forget to multiply by five!
+	ex3.weight = (storedC >> 24) * 5; // Don't forget to multiply by five!
 	
 	ex3.reps[0] = ((storedC & 0x00FFFFFF) >> 21);
 	ex3.reps[1] = ((storedC & 0x001FFFFF) >> 18);

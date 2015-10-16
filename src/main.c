@@ -16,10 +16,14 @@ void init(){
 	int sets2[5];
 	int sets3[5];
 	
+	int other_sets1[5];
+	int other_sets2[5];
+	int other_sets3[5];
+	
 	for(int i = 0; i < 5; i++){
-		sets1[i] = 0;
-		sets2[i] = 0;
-		sets3[i] = 0;
+		sets1[i] = 3;
+		sets2[i] = 5;
+		sets3[i] = 1;
 	}
 	
 	// Exercises
@@ -40,7 +44,7 @@ void init(){
 	
 	// Workout
 	Workout workout;
-	workout.day_type = true; // true means B day; false means A day
+	workout.day_type = false; // true means B day; false means A day
 	workout.year = 115; // Remember: year is counted from 1900
 	workout.month = 10;
 	workout.day = 15;
@@ -49,19 +53,20 @@ void init(){
 	workout.exercise3 = exercise3;
 	
 	// Now the tests
-	Workout other = convert_int_to_workout(convert_workout_to_int_typeA(workout), convert_workout_to_int_typeB(workout), convert_workout_to_int_typeC(workout));
+	Workout other = convert_int_to_workout(convert_workout_to_int_typeA(workout), convert_workout_to_int_typeB(workout), 
+																				 convert_workout_to_int_typeC(workout), other_sets1, other_sets2, other_sets3);
 	APP_LOG(APP_LOG_LEVEL_INFO, "Year: %i", other.year);
 	APP_LOG(APP_LOG_LEVEL_INFO, "Month: %i", other.month);
 	APP_LOG(APP_LOG_LEVEL_INFO, "Day: %i", other.day);
 	
 	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise1.name, i, other.exercise1.reps[i]);
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise1.name, other.exercise1.weight, i, other.exercise1.reps[i]);
 	
 	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise2.name, i, other.exercise2.reps[i]);
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise2.name, other.exercise2.weight, i, other.exercise2.reps[i]);
 	
 	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s; %i: %i", other.exercise3.name, i, other.exercise3.reps[i]);
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise3.name, other.exercise3.weight, i, other.exercise3.reps[i]);
 }
 
 void deinit(){
