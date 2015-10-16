@@ -131,11 +131,28 @@ void delete_workout(int index) {
 	}
 }
 
-/* Returns an integer containing the day type and date the workout was created at the index passed */
-int peek_workout(int index){
-	// TODO: Implement this
+/* Returns a WorkoutPeek structure */
+WorkoutPeek peek_workout(int index){
+	WorkoutPeek peek;
+	int read_index = WORKOUT_LOG_START_KEY + (index * 3);
 	
-	return 0; // a stub
+	// If it exists, let's peek it
+	if(persist_exists(read_index)){
+		int peek_int = persist_read_int(read_index);
+		
+		// Pull out the peek information and return it
+		peek.day_type = (peek_int < 0);
+		peek.year = ((peek_int & 0x7FFFFFFF) >> 23) + 2000;
+		peek.month = ((peek_int & 0x007FFFFF) >> 19);
+		peek.day = ((peek_int & 0x0007FFFF) >> 14);
+	}
+	
+	// This code should never run
+	else {
+		APP_LOG(APP_LOG_LEVEL_ERROR, "Attempted to peek at index %i!", index);
+	}
+	
+	return peek;
 }
 
 /* Returns the number of workouts in the model */
@@ -157,7 +174,7 @@ int convert_workout_to_int_typeA(Workout workout){
 		result = 1;
 	
 	// Throw in the year, month and day
-	result = (result << 8) + workout.year;
+	result = (result << 8) + (workout.year - 2000); // We use 1900 as the year we gauge everything by
 	result = (result << 4) + workout.month;
 	result = (result << 5) + workout.day;
 	
@@ -218,7 +235,7 @@ Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1
 	
 	// Get all the stuff from storedA
 	result.day_type = (storedA < 0); // If storedA is negative, then it's a B day
-	result.year = ((storedA & 0x7FFFFFFF) >> 23);
+	result.year = ((storedA & 0x7FFFFFFF) >> 23) + 2000; // We use 1900 as our gauging year
 	result.month = ((storedA & 0x007FFFFF) >> 19);
 	result.day = ((storedA & 0x0007FFFF) >> 14);
 	
@@ -303,11 +320,6 @@ void nuke_all_old_workouts(){
 	// Delete the count of all of the old workouts
 	persist_delete(WORKOUT_LOG_COUNT_KEY);
 }
-
-/*
- * Various debugging functions
- */
-
 
 
 

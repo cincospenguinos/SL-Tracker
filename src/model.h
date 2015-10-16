@@ -37,6 +37,16 @@ typedef struct {
 	Exercise exercise3; // The third exercise - Bent Rows or Deadlift
 }Workout;
 
+/* WorkoutPeek struct definition */
+typedef struct {
+	bool day_type; // false for A, true for B
+	
+	// Date the workout was created
+	int year;
+	int month;
+	int day;
+}WorkoutPeek;
+
 /*
  * Model Management Functions - acts as a controller
  */
@@ -56,8 +66,8 @@ Workout get_workout(int index, int *sets1, int *sets2, int *sets3);
 /* Deletes the workout at the index passed */
 void delete_workout(int index);
 
-/* Returns an integer containing the day type and date the workout was created at the index passed */
-int peek_workout(int index);
+/* Returns a small structure containing the day type and date the workout was created at the index passed */
+WorkoutPeek peek_workout(int index);
 
 /* Returns the number of workouts in the model */
 int get_workout_count();

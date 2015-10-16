@@ -62,8 +62,8 @@ void init(){
 	
 	// Workout
 	Workout workout;
-	workout.day_type = false; // true means B day; false means A day
-	workout.year = 115; // Remember: year is counted from 1900
+	workout.day_type = true; // true means B day; false means A day
+	workout.year = 2015;
 	workout.month = 10;
 	workout.day = 15;
 	workout.exercise1 = exercise1;
@@ -78,10 +78,14 @@ void init(){
 	// Now delete one
 	delete_workout(1);
 	
-	for(int i = 0; i < get_workout_count(); i++){
-		Workout other = get_workout(i, other_sets1, other_sets2, other_sets3);
-		print_all_info(other);
-	}
+// 	for(int i = 0; i < get_workout_count(); i++){
+// 		Workout other = get_workout(i, other_sets1, other_sets2, other_sets3);
+// 		print_all_info(other);
+// 	}
+	
+	// Now peek at one
+	WorkoutPeek peek = peek_workout(1);
+	APP_LOG(APP_LOG_LEVEL_INFO, "%i:%i:%i ----> %i", peek.year, peek.month, peek.day, peek.day_type);
 	
 	// Destroy everything
 	nuke_all_old_workouts();
