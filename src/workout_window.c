@@ -3,11 +3,18 @@
 #include "model.h"
 	
 /* Creates and pushes this window onto the stack */
-void workout_window_init(bool day){
-	// TODO: Pull the necessary data up to manage with here
-	
+void workout_window_init(){
 	// Set the current day_type
-	day_type = day;
+	day_type = get_workout_day_type();
+	exercise1_weight = get_squat_weight();
+	
+	if(!day_type){
+		exercise2_weight = get_bench_weight();
+		exercise3_weight = get_bent_rows_weight();
+	} else {
+		exercise2_weight = get_overhead_weight();
+		exercise3_weight = get_deadlifts_weight();
+	}
 	
 	// Create the window and define the handlers
 	workout_window = window_create();
@@ -39,9 +46,9 @@ void workout_window_load(Window *window){
 	
 	// weight text layer
 	weight_text = text_layer_create(GRect(36, 20, 72, 16));
-	text_layer_set_text(weight_text, "999 lbs");
 	text_layer_set_font(weight_text, fonts_get_system_font(FONT_KEY_GOTHIC_14));
 	text_layer_set_text_alignment(weight_text, GTextAlignmentCenter);
+	update_weight_text();
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(weight_text));
 	
 	// timer text layer
@@ -141,12 +148,24 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		timer_running = false;
 		text_layer_set_text(motivation, "");
 		
-		// TODO: Store the data for this exercise away
-		
 		// If we've reached the end of our workout, then we dump everything we have into persistent storage and call it a day
-		if(++current_exercise_index == 3){
-			// TODO: Store the workout and push it to the persistent storage
+		if(++current_exercise_index == 3) {
+			// TODO: Store the workout into the model
+// 			Exercise exercise1;
+// 			exercise1.name = "Squats";
 			
+// 			Exercise exercise2;
+// 			Exercise exercise3;
+			
+// 			if(!day_type){
+// 				exercise2.name = "Bench Press";
+// 				exercise3.name = "Bent Rows";
+// 			} else {
+// 				exercise2.name = "Overhead Press";
+// 				exercise3.name = "Deadlift";
+// 			}
+			
+			APP_LOG(APP_LOG_LEVEL_INFO, "Done with workout; workout_window popping off the stack");
 			// Pop this window off the stack
 			window_stack_pop(true);
 			return;
@@ -155,6 +174,7 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		else {
 			// Otherwise, we set the text of the current exercise
 			update_exercise_text();
+			update_weight_text();
 		}
 	}
 	
@@ -189,11 +209,13 @@ void workout_window_single_back_click(ClickRecognizerRef recognizer, void *conte
 		
 		// If we are backing completely out of the workout, then we need to pop off this window
 		if (--current_exercise_index == -1){
+			APP_LOG(APP_LOG_LEVEL_INFO, "workout_window popping off the stack");
 			window_stack_pop(true);
 			return;
 		} else {
 			// Otherwise we need to reset the current exercise text
 			update_exercise_text();
+			update_weight_text();
 		}
 	}
 	
@@ -314,6 +336,22 @@ void update_exercise_text(){
 	}
 	
 	text_layer_set_text(current_exercise, get_exercise_text());
+}
+
+/* Updates the listed weight text */
+void update_weight_text(){	
+	switch(current_exercise_index) {
+		case 0:
+		snprintf(weight_buffer, sizeof(weight_buffer), "%i lbs", exercise1_weight);
+		break;
+		case 1:
+		snprintf(weight_buffer, sizeof(weight_buffer), "%i lbs", exercise2_weight);
+		break;
+		default:
+		snprintf(weight_buffer, sizeof(weight_buffer), "%i lbs", exercise3_weight);
+	}
+	
+	text_layer_set_text(weight_text, weight_buffer);
 }
 
 /*

@@ -72,6 +72,17 @@ WorkoutPeek peek_workout(int index);
 /* Returns the number of workouts in the model */
 int get_workout_count();
 
+/* Returns boolean indicating an A day or B day */
+bool get_workout_day_type();
+
+/* Get weight for various exercises; always in pounds */
+int get_squat_weight();
+int get_bench_weight();
+int get_bent_rows_weight();
+int get_overhead_weight();
+int get_deadlifts_weight();
+
+
 /*
  * Conversion functions - converts ints to structs and back
  */

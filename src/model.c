@@ -160,6 +160,27 @@ int get_workout_count(){
 	return persist_read_int(WORKOUT_LOG_COUNT_KEY);
 }
 
+/* Returns boolean indicating an A day or B day */
+bool get_workout_day_type(){
+	return persist_read_bool(WORKOUT_TYPE_KEY);
+}
+
+/* Get weight for various exercises; always in pounds */
+int get_squat_weight(){
+	return persist_read_int(SQUAT_WEIGHT_KEY);
+}
+int get_bench_weight(){
+	return persist_read_int(BENCH_WEIGHT_KEY);
+}
+int get_bent_rows_weight(){
+	return persist_read_int(BENT_WEIGHT_KEY);
+}
+int get_overhead_weight(){
+	return persist_read_int(OVERHEAD_WEIGHT_KEY);
+}
+int get_deadlifts_weight(){
+	return persist_read_int(DEADLIFT_WEIGHT_KEY);
+}
 
 /*
  * Conversion functions - converts ints to structs and back

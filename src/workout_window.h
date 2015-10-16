@@ -26,7 +26,12 @@ int current_working_set; // the current set that the user is working on
 int current_exercise_index; // manages the current exercise
 
 char buffers[5][2]; // An array of buffers to manage the sets text layers
+char weight_buffer[8];
 int reps_per_exercise[3][5]; // An array of integers to manage the number of reps for each set in each exercise
+
+int exercise1_weight; // The weight for the first exercise
+int exercise2_weight; // The weight for the second exercise
+int exercise3_weight; // The weight for the third exercise
 
 // TODO: Figure out how to store all of the data with the reps and show it back to the user
 
@@ -34,7 +39,7 @@ bool on_deadlifts; // True if the user is currently working on deadlifts
 bool failed_set; // True if the user failed a set
 
 /* Initializes and pushes this window */
-void workout_window_init(bool);
+void workout_window_init();
 
 /* Window handlers */
 void workout_window_load(Window *window);
@@ -55,6 +60,8 @@ void update_motivation_text();
 
 const char * get_exercise_text();
 void update_exercise_text();
+
+void update_weight_text();
 
 /* Time functions */
 void tick_handler(struct tm *tick_time, TimeUnits units_changed);
