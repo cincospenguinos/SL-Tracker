@@ -56,7 +56,7 @@ void toggle_next_workout(){
 }
 
 /* Stores into persistent memory the workout structure passed */
-void store_workout(Workout workout){
+void store_new_workout(Workout workout) {
 	// First convert the workout into three separate integers
 	int workout_intA = convert_workout_to_int_typeA(workout);
 	int workout_intB = convert_workout_to_int_typeB(workout);
@@ -68,15 +68,37 @@ void store_workout(Workout workout){
 	persist_write_int(write_index + 1, workout_intB);
 	persist_write_int(write_index + 2, workout_intC);
 	
+	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index + 1);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index + 2);
+	
 	// Add one to the count
 	persist_write_int(WORKOUT_LOG_COUNT_KEY, persist_read_int(WORKOUT_LOG_COUNT_KEY) + 1);
+	
+	// Toggle the next workout
+	toggle_next_workout();
 }
 
 /* Pulls the workout out from the index passed */
-Workout get_workout(int index){
-	// TODO: Implement this
+Workout get_workout(int index, int *sets1, int *sets2, int *sets3) {
 	Workout result;
-	return result; // a stub
+	int model_index = WORKOUT_LOG_START_KEY + index * 3;
+	
+	if(persist_exists(model_index)){
+		int storedA = persist_read_int(model_index);
+		int storedB = persist_read_int(model_index + 1);
+		int storedC = persist_read_int(model_index + 2);
+		
+		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index);
+		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index + 1);
+		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index + 2);
+		
+		result = convert_int_to_workout(storedA, storedB, storedC, sets1, sets2, sets3);
+	} else {
+		APP_LOG(APP_LOG_LEVEL_ERROR, "Entry could not be found at %i!", index);
+	}
+	
+	return result;
 }
 
 /* Deletes the workout at the index passed */
@@ -214,21 +236,6 @@ Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1
 	return result;
 }
 
-/* Converts exercise structure to an integer */
-int convert_exercise_to_int(Exercise exercise){
-	// TODO: Implement this
-	return 0; // a stub
-}
-
-/* Converts an integer to an exercise structure */
-Exercise convert_int_to_exercise(int exercise){
-	// TODO: Implement this
-	Exercise result;
-	
-	
-	return result; // a stub
-}
-
 
 /*
  * Version Management Functions
@@ -242,6 +249,28 @@ void update_version1_workouts(){
 /* Migrate all of the old workouts to the new workouts */
 void migrate_old_workouts(){
 	// NOTE: Implement this if needed
+}
+
+/* Deletes all persistant data with this application */
+void nuke_all_old_workouts(){
+	// Delete all of the keys
+	persist_delete(STORAGE_VERSION_KEY);
+	persist_delete(WORKOUT_TYPE_KEY);
+	persist_delete(SQUAT_WEIGHT_KEY);
+	persist_delete(BENCH_WEIGHT_KEY);
+	persist_delete(BENT_WEIGHT_KEY);
+	persist_delete(OVERHEAD_WEIGHT_KEY);
+	persist_delete(DEADLIFT_WEIGHT_KEY);
+	
+	// Delete all of the old workouts
+	for(int i = 0; i < persist_read_int(WORKOUT_LOG_COUNT_KEY); i++){
+		persist_delete(i);
+		persist_delete(i + 1);
+		persist_delete(i + 1);
+	}
+	
+	// Delete the count of all of the old workouts
+	persist_delete(WORKOUT_LOG_COUNT_KEY);
 }
 
 

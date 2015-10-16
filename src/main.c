@@ -9,22 +9,40 @@
 
 // TODO: Fix the model so that array pointers are dumped into the convert_int_to_workout() function
 
+void print_all_info(Workout workout){
+	APP_LOG(APP_LOG_LEVEL_INFO, "Year: %i", workout.year);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Month: %i", workout.month);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Day: %i", workout.day);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i:%i", workout.exercise1.name, workout.exercise1.weight, i, workout.exercise1.reps[i]);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i:%i", workout.exercise2.name, workout.exercise2.weight, i, workout.exercise2.reps[i]);
+	
+	for(int i = 0; i < 5; i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i:%i", workout.exercise3.name, workout.exercise3.weight, i, workout.exercise3.reps[i]);
+}
+
 void init(){
 //	workout_window_init(false);
+	// Ensure we have the model established
+	init_model();
+	
 	// We will use this as a test method for now
 	int sets1[5];
 	int sets2[5];
 	int sets3[5];
-	
-	int other_sets1[5];
-	int other_sets2[5];
-	int other_sets3[5];
 	
 	for(int i = 0; i < 5; i++){
 		sets1[i] = 3;
 		sets2[i] = 5;
 		sets3[i] = 1;
 	}
+	
+	int other_sets1[5];
+	int other_sets2[5];
+	int other_sets3[5];
 	
 	// Exercises
 	Exercise exercise1;
@@ -53,20 +71,12 @@ void init(){
 	workout.exercise3 = exercise3;
 	
 	// Now the tests
-	Workout other = convert_int_to_workout(convert_workout_to_int_typeA(workout), convert_workout_to_int_typeB(workout), 
-																				 convert_workout_to_int_typeC(workout), other_sets1, other_sets2, other_sets3);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Year: %i", other.year);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Month: %i", other.month);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Day: %i", other.day);
+	store_new_workout(workout); // Store a workout
+	Workout other = get_workout(0, other_sets1, other_sets2, other_sets3); // Get the first workout
+	print_all_info(other);
 	
-	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise1.name, other.exercise1.weight, i, other.exercise1.reps[i]);
-	
-	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise2.name, other.exercise2.weight, i, other.exercise2.reps[i]);
-	
-	for(int i = 0; i < 5; i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "%s => %i lbs; %i: %i", other.exercise3.name, other.exercise3.weight, i, other.exercise3.reps[i]);
+	// Destroy everything
+	nuke_all_old_workouts();
 }
 
 void deinit(){

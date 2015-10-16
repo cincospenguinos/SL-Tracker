@@ -48,10 +48,10 @@ void init_model();
 void toggle_next_workout();
 
 /* Stores into persistent memory the workout structure passed */
-void store_workout(Workout workout);
+void store_new_workout(Workout workout);
 
 /* Pulls the workout out from the index passed */
-Workout get_workout(int index);
+Workout get_workout(int index, int *sets1, int *sets2, int *sets3);
 
 /* Deletes the workout at the index passed */
 void delete_workout(int index);
@@ -71,12 +71,6 @@ int convert_workout_to_int_typeC(Workout workout);
 /* Converts an integer to a workout structure */
 Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1, int *sets2, int *sets3);
 
-/* Converts exercise structure to an integer */
-int convert_exercise_to_int(Exercise exercise);
-
-/* Converts an integer to an exercise structure */
-Exercise convert_int_to_exercise(int exercise);
-
 /*
  * Version Management Functions - in case I change my mind on how things should be stored
  */
@@ -86,3 +80,6 @@ void update_version1_workouts();
 
 /* Migrate all of the old workouts to the new workouts */
 void migrate_old_workouts();
+
+/* Deletes all persistant data with this application */
+void nuke_all_old_workouts();
