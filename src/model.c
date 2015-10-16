@@ -102,8 +102,33 @@ Workout get_workout(int index, int *sets1, int *sets2, int *sets3) {
 }
 
 /* Deletes the workout at the index passed */
-void delete_workout(int index){
-	// TODO: Implement this
+void delete_workout(int index) {
+	int current_index = WORKOUT_LOG_START_KEY + index * 3; // where in the model we are actually deleting
+	int next_index = WORKOUT_LOG_START_KEY + (index + 1) * 3; // The next one down
+	
+	if(persist_exists(current_index)){
+		while(persist_exists(current_index)){
+		
+			// If another workout exists in the next space, copy it over
+			if(persist_exists(next_index)){
+				persist_write_int(current_index, persist_read_int(next_index));
+				persist_write_int(current_index + 1, persist_read_int(next_index + 1));
+				persist_write_int(current_index + 2, persist_read_int(next_index + 2));
+			} 
+
+			// Otherwise, just delete the current one
+			else {
+				persist_delete(current_index);
+				persist_delete(current_index + 1);
+				persist_delete(current_index + 1);
+			}
+
+			current_index += 3;
+			next_index += 3;
+		}
+		
+		persist_write_int(WORKOUT_LOG_COUNT_KEY, persist_read_int(WORKOUT_LOG_COUNT_KEY) - 1);
+	}
 }
 
 /* Returns an integer containing the day type and date the workout was created at the index passed */

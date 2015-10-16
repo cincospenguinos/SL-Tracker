@@ -75,6 +75,9 @@ void init(){
 	store_new_workout(workout); // Store another workout
 	store_new_workout(workout); // Store yet another workout
 	
+	// Now delete one
+	delete_workout(1);
+	
 	for(int i = 0; i < get_workout_count(); i++){
 		Workout other = get_workout(i, other_sets1, other_sets2, other_sets3);
 		print_all_info(other);
