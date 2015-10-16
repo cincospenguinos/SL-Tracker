@@ -48,8 +48,11 @@ void init(){
 	
 	// Now the tests
 	int workout_intA = convert_workout_to_int_typeA(workout);
+	int workout_intB = convert_workout_to_int_typeB(workout);
+	int workout_intC = convert_workout_to_int_typeC(workout);
 	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intA: %X", workout_intA);
-	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intA: %i", workout_intA);
+	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intB: %X", workout_intB);
+	APP_LOG(APP_LOG_LEVEL_INFO, "workout_intC: %X", workout_intC);
 }
 
 void deinit(){

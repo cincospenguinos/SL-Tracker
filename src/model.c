@@ -103,40 +103,49 @@ int convert_workout_to_int_typeA(Workout workout){
 	if(workout.day_type)
 		result = 1;
 	
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
-	
 	// Throw in the year, month and day
-	result = (result << 8) | workout.year;
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
+	result = (result << 8) + workout.year;
 	result = (result << 4) + workout.month;
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
 	result = (result << 5) + workout.day;
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
 	
 	// Now the weight of the first exercise
-	result = (result << 6) + (workout.exercise1.weight / 5); // We store the weight in lbs divided by 5
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Exercise 1 weight: %X", (workout.exercise1.weight / 5));
+	result = (result << 8) + (workout.exercise1.weight / 5); // We store the weight in lbs divided by 5
 	
 	// And now two of the sets
 	result = (result << 3) + workout.exercise1.reps[0];
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
 	result = (result << 3) + workout.exercise1.reps[1];
-	APP_LOG(APP_LOG_LEVEL_INFO, "%X", result);
-	
-	result = result << 2;
 	
 	return result;
 }
 int convert_workout_to_int_typeB(Workout workout){
-	// TODO: Implement this
+	int result = 0;
 	
-	return 0; // a stub
+	// put in the last few sets of the first exercise
+	result = workout.exercise1.reps[2];
+	result = (result << 3) + workout.exercise1.reps[3];
+	result = (result << 3) + workout.exercise1.reps[4];
+	
+	// put in the weight for the second exercise
+	result = (result << 6) + (workout.exercise2.weight / 5);
+	
+	// put in all of the sets for the second exercise
+	for(int i = 0; i < 5; i++)
+		result = (result << 3) + workout.exercise2.reps[i];
+	
+	return result;
 }
 int convert_workout_to_int_typeC(Workout workout){
-	// TODO: Implement this
+	// dump in the weight over five first
+	int result = workout.exercise3.weight / 5;
 	
-	return 0; // a stub
+	// dump in each of the sets
+	for(int i = 0; i < 5; i++)
+		result = (result << 3) + workout.exercise3.reps[i];
+	
+	// move over the necessary bits
+	result = (result << 9);
+	
+	return result;
 }
 
 /* Converts an integer to a workout structure */
