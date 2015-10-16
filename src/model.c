@@ -77,6 +77,83 @@ void store_new_workout(Workout workout) {
 	
 	// Toggle the next workout
 	toggle_next_workout();
+	
+	// Manage the weight changes
+	int sum1 = 0;
+	int sum2 = 0;
+	int sum3 = 0;
+	
+	for(int i = 0; i < 5; i++){
+		sum1 += workout.exercise1.reps[i];
+		sum2 += workout.exercise2.reps[i];
+		sum3 += workout.exercise3.reps[i];
+	}
+	
+	if(sum1 == 25){
+		persist_write_int(SQUAT_WEIGHT_KEY, persist_read_int(SQUAT_WEIGHT_KEY) + 5);
+	}
+	
+	// A day
+	if(!workout.day_type){
+		if(sum2 == 25)
+			persist_write_int(BENCH_WEIGHT_KEY, persist_read_int(BENCH_WEIGHT_KEY) + 5);
+		
+		if(sum3 == 25)
+			persist_write_int(BENT_WEIGHT_KEY, persist_read_int(BENT_WEIGHT_KEY) + 5);
+	} 
+	
+	// B day
+	else {
+		if(sum2 == 25)
+			persist_write_int(OVERHEAD_WEIGHT_KEY, persist_read_int(OVERHEAD_WEIGHT_KEY) + 5);
+		
+		if(sum3 == 25)
+			persist_write_int(DEADLIFT_WEIGHT_KEY, persist_read_int(DEADLIFT_WEIGHT_KEY) + 5);
+	}
+}
+
+/* Stores into persistent memory a workout using the data passed */
+void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, int weight1, int weight2, int weight3){
+	// NOTE: The weight passed is the REAL weight, not the modified weight!
+	
+	// Let's get the time
+	time_t tmp = time(NULL);
+	struct tm *current_time = localtime(&tmp);
+	
+	// Setup the exercises
+	Exercise exercise1;
+	exercise1.name = "Squats";
+	exercise1.weight = weight1;
+	exercise1.reps = sets1;
+	
+	Exercise exercise2;
+	exercise2.weight = weight2;
+	exercise2.reps = sets2;
+	
+	Exercise exercise3;
+	exercise3.weight = weight3;
+	exercise3.reps = sets3;
+	
+	if(!day_type){
+		exercise2.name = "Bench Press";
+		exercise3.name = "Bent Rows";
+	} else {
+		exercise2.name = "Overhead Press";
+		exercise3.name = "Deadlift";
+	}
+	
+	// Setup the workout
+	Workout workout;
+	workout.day_type = day_type;
+	workout.year = current_time->tm_year + 1900; // We keep track of the full year
+	workout.month = current_time->tm_mon;
+	workout.day = current_time->tm_mday;
+	
+	workout.exercise1 = exercise1;
+	workout.exercise2 = exercise2;
+	workout.exercise3 = exercise3;
+	
+	store_new_workout(workout);
 }
 
 /* Pulls the workout out from the index passed */

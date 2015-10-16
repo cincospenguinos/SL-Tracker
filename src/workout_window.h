@@ -33,7 +33,7 @@ int exercise1_weight; // The weight for the first exercise
 int exercise2_weight; // The weight for the second exercise
 int exercise3_weight; // The weight for the third exercise
 
-// TODO: Figure out how to store all of the data with the reps and show it back to the user
+bool finished_workout; // Indicates whether we need to save the workout or not
 
 bool on_deadlifts; // True if the user is currently working on deadlifts
 bool failed_set; // True if the user failed a set

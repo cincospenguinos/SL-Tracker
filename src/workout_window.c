@@ -3,7 +3,7 @@
 #include "model.h"
 	
 /* Creates and pushes this window onto the stack */
-void workout_window_init(){
+void workout_window_init(){	
 	// Set the current day_type
 	day_type = get_workout_day_type();
 	exercise1_weight = get_squat_weight();
@@ -97,7 +97,10 @@ void workout_window_unload(Window *window){
 	
 	tick_timer_service_unsubscribe();
 	
-	// TODO: Send the workout created (if one is created) to the model here
+	// Store the workout if we finished the workout
+	if(finished_workout){
+		store_new_workout_raw(day_type, reps_per_exercise[0], reps_per_exercise[1], reps_per_exercise[2], exercise1_weight, exercise2_weight, exercise3_weight);
+	}
 }
 
 /*
@@ -152,22 +155,9 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		
 		// If we've reached the end of our workout, then we dump everything we have into persistent storage and call it a day
 		if(++current_exercise_index == 3) {
-			// TODO: Store the workout into the model
-// 			Exercise exercise1;
-// 			exercise1.name = "Squats";
+			// We've finished the workout, so we will indicate that here
+			finished_workout = true;
 			
-// 			Exercise exercise2;
-// 			Exercise exercise3;
-			
-// 			if(!day_type){
-// 				exercise2.name = "Bench Press";
-// 				exercise3.name = "Bent Rows";
-// 			} else {
-// 				exercise2.name = "Overhead Press";
-// 				exercise3.name = "Deadlift";
-// 			}
-			
-			APP_LOG(APP_LOG_LEVEL_INFO, "Done with workout; workout_window popping off the stack");
 			// Pop this window off the stack
 			window_stack_pop(true);
 			return;

@@ -60,6 +60,9 @@ void toggle_next_workout();
 /* Stores into persistent memory the workout structure passed */
 void store_new_workout(Workout workout);
 
+/* Stores into persistent memory a workout using the data passed */
+void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, int weight1, int weight2, int weight3);
+
 /* Pulls the workout out from the index passed */
 Workout get_workout(int index, int *sets1, int *sets2, int *sets3);
 
