@@ -3,6 +3,8 @@
 	
 /* Creates and pushes this window onto the stack */
 void workout_window_init(bool day){
+	// TODO: Pull the necessary data up to manage with here
+	
 	// Set the current day_type
 	day_type = day;
 	
@@ -75,6 +77,7 @@ void workout_window_load(Window *window){
 /* Tears down the workout_window when the window pops off the stack */
 void workout_window_unload(Window *window){
 	text_layer_destroy(current_exercise);
+	text_layer_destroy(weight_text);
 	text_layer_destroy(timer);
 	
 	for(int i = 0; i < 5; i++){
@@ -82,7 +85,6 @@ void workout_window_unload(Window *window){
 	}
 	
 	inverter_layer_destroy(selected_set_layer);
-	
 	text_layer_destroy(motivation);
 }
 

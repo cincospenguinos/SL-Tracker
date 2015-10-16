@@ -5,13 +5,15 @@
 */
 #include <pebble.h>
 #include "workout_window.h"
+#include "model.h"
 
 void init(){
-	workout_window_init(true);
+//	workout_window_init(false);
+	
 }
 
 void deinit(){
-	window_destroy(workout_window);
+// 	window_destroy(workout_window);
 }
 	
 int main(void){
