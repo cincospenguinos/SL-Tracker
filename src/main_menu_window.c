@@ -43,9 +43,15 @@ void main_menu_window_load(Window *window){
 		.callback = view_log_callback
 	};
 	
+	menu_items[3] = (SimpleMenuItem){
+		.title = "Delete Log",
+		.subtitle = "Delete old workouts",
+		.callback = delete_log_callback
+	};
+	
 	// setup the one section we have
 	sections[0] = (SimpleMenuSection){
-		.num_items = 3,
+		.num_items = 5,
 		.items = menu_items
 	};
 	
@@ -60,9 +66,9 @@ void main_menu_window_load(Window *window){
 void main_menu_window_unload(){
 	simple_menu_layer_destroy(main_menu_layer);
 	
-// 	if(workout_window != NULL){
-// 		window_destroy(workout_window);
-// 	}
+	if(workout_window != NULL){
+		window_destroy(workout_window);
+	}
 }
 
 /*
@@ -76,10 +82,15 @@ void new_workout_callback(){
 
 /* Called when the user wants to setup the workout */
 void setup_workout_callback(){
-	
+	// TODO: Implement this
 }
 
 /* Called when the user wants to check the old workouts he/she has */
 void view_log_callback(){
-	
+	// TODO: Implement this
+}
+
+/* Called when the user selects to delete the workout log */
+void delete_log_callback(){
+	// TODO: Implement this
 }

@@ -16,7 +16,7 @@ Window *main_menu_window; // The window itself
 
 SimpleMenuLayer *main_menu_layer; // The menu layer that will contain everything
 SimpleMenuSection sections[1]; // We will only have one single section because that's all we need here
-SimpleMenuItem menu_items[3]; // The collection of items listed on the menu
+SimpleMenuItem menu_items[4]; // The collection of items listed on the menu
 
 /* Init function */
 void main_menu_window_init();
@@ -43,3 +43,6 @@ void setup_workout_callback();
 
 /* Called when the user wants to check the old workouts he/she has */
 void view_log_callback();
+
+/* Called when the user requests to nuke the whales */
+void delete_log_callback();

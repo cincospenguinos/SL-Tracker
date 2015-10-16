@@ -131,7 +131,7 @@ void workout_window_click_config_provider(Window *window){
 	window_long_click_subscribe(BUTTON_ID_BACK, 1500, workout_window_long_back_click, NULL);
 }
 
-/* Run when a single up click event occurs */
+/* Runs when a single up click event occurs */
 void workout_window_single_up_click(ClickRecognizerRef recognizer, void *context){
 	if(current_rep_count < 5)
 		current_rep_count++;
@@ -139,7 +139,7 @@ void workout_window_single_up_click(ClickRecognizerRef recognizer, void *context
 	update_rep_text();
 }
 
-/* Run when a single up click event occurs */
+/* Runs when a single down click event occurs */
 void workout_window_single_down_click(ClickRecognizerRef recognizer, void *context){
 	if(current_rep_count > 0)
 		current_rep_count--;
@@ -147,7 +147,7 @@ void workout_window_single_down_click(ClickRecognizerRef recognizer, void *conte
 	update_rep_text();
 }
 
-/* Run when a single up click event occurs */
+/* Runs when a single select click event occurs */
 void workout_window_single_select_click(ClickRecognizerRef recognizer, void *context){
 	// Store the current rep amount for this set of this exercise away
 	reps_per_exercise[current_exercise_index][current_working_set] = current_rep_count;
@@ -200,7 +200,7 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 	update_rep_text(); // Update the number of reps on the next set
 }
 
-/* Run when a single up click event occurs */
+/* Runs when a single back click event occurs */
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
 	// Store the current rep amount for this set of this exercise away
 	reps_per_exercise[current_exercise_index][current_working_set] = current_rep_count;
