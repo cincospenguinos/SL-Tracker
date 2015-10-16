@@ -4,17 +4,30 @@
 	
 /* Creates and pushes this window onto the stack */
 void workout_window_init(){	
-	// Set the current day_type
+	// Prepare to show the necessary information for the type of workout we are doing today
 	day_type = get_workout_day_type();
 	exercise1_weight = get_squat_weight();
 	
 	if(!day_type){
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Beginning workout A");
 		exercise2_weight = get_bench_weight();
 		exercise3_weight = get_bent_rows_weight();
 	} else {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Beginning workout B");
 		exercise2_weight = get_overhead_weight();
 		exercise3_weight = get_deadlifts_weight();
 	}
+	
+	// Reset the values of the various data members to ensure no weirdness
+	for(int i = 0; i < 3; i++)
+		for(int j = 0; j < 5; j++)
+			reps_per_exercise[i][j] = 0;
+		
+	current_rep_count = 0;
+	current_exercise_index = 0;
+	timer_count = 0;
+	current_working_set = 0;
+	finished_workout = false;
 	
 	// Create the window and define the handlers
 	workout_window = window_create();
@@ -84,6 +97,7 @@ void workout_window_load(Window *window){
 
 /* Tears down the workout_window when the window pops off the stack */
 void workout_window_unload(Window *window){
+	
 	text_layer_destroy(current_exercise);
 	text_layer_destroy(weight_text);
 	text_layer_destroy(timer);
@@ -155,6 +169,7 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 		
 		// If we've reached the end of our workout, then we dump everything we have into persistent storage and call it a day
 		if(++current_exercise_index == 3) {
+			
 			// We've finished the workout, so we will indicate that here
 			finished_workout = true;
 			
@@ -301,9 +316,7 @@ void update_motivation_text(){
 }
 
 /* Updates the exercise text */
-void update_exercise_text(){
-	// TODO: Figure out the weight text layer
-	
+void update_exercise_text(){	
 	// If it's currently a B day and we're working on deadlifts, we need to do some things
 	if(day_type && current_exercise_index == 2){
 		current_working_set = 2; // First we will need to indicate that the current working set is 2

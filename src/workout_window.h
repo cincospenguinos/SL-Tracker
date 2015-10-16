@@ -26,7 +26,7 @@ int current_working_set; // the current set that the user is working on
 int current_exercise_index; // manages the current exercise
 
 char buffers[5][2]; // An array of buffers to manage the sets text layers
-char weight_buffer[8];
+char weight_buffer[8]; // Buffer to hold the weight of the various exercises
 int reps_per_exercise[3][5]; // An array of integers to manage the number of reps for each set in each exercise
 
 int exercise1_weight; // The weight for the first exercise

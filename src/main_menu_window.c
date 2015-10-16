@@ -60,9 +60,9 @@ void main_menu_window_load(Window *window){
 void main_menu_window_unload(){
 	simple_menu_layer_destroy(main_menu_layer);
 	
-	// TODO: Figure out how you're going to do this
-	if(workout_window != NULL)
+	if(workout_window != NULL){
 		window_destroy(workout_window);
+	}
 }
 
 /*

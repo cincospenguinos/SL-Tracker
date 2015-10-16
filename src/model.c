@@ -51,6 +51,8 @@ void init_model() {
 /* Toggles the boolean A/B day type */
 void toggle_next_workout(){
 	bool type_of_day = persist_read_bool(WORKOUT_TYPE_KEY);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Toggling workout day from %i to %i", type_of_day, !type_of_day);
+	
 	type_of_day = !type_of_day;
 	persist_write_bool(WORKOUT_TYPE_KEY, type_of_day);
 }
@@ -67,10 +69,9 @@ void store_new_workout(Workout workout) {
 	persist_write_int(write_index, workout_intA);
 	persist_write_int(write_index + 1, workout_intB);
 	persist_write_int(write_index + 2, workout_intC);
-	
-	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index + 1);
-	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", write_index + 2);
+
+	int some_index = persist_read_int(WORKOUT_LOG_COUNT_KEY);	
+	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", some_index);
 	
 	// Add one to the count
 	persist_write_int(WORKOUT_LOG_COUNT_KEY, persist_read_int(WORKOUT_LOG_COUNT_KEY) + 1);
