@@ -5,6 +5,7 @@
 */
 #include <pebble.h>
 #include "main_menu_window.h"
+#include "workout_window.h"
 #include "model.h"
 
 void init(){
@@ -22,6 +23,10 @@ void deinit() {
 // 	Workout workout = get_workout(get_workout_count() - 1, set1, set2, set3);
 // 	APP_LOG(APP_LOG_LEVEL_DEBUG, "%i-%i-%i: day_type=%i\n%s: %i\n%s: %i\n%s: %i", workout.year, workout.month, workout.day, workout.day_type, 
 // 					workout.exercise1.name, workout.exercise1.weight, workout.exercise2.name, workout.exercise2.weight, workout.exercise3.name, workout.exercise3.weight);
+	
+	if(workout_window != NULL){
+		window_destroy(workout_window);
+	}
 	
 	nuke_all_old_workouts(); // TODO: Remove this
 }

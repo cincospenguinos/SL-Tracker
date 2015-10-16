@@ -30,7 +30,8 @@ void workout_window_init(){
 	finished_workout = false;
 	
 	// Create the window and define the handlers
-	workout_window = window_create();
+	if(workout_window == NULL)
+		workout_window = window_create();
 	
 	window_set_window_handlers(workout_window, (WindowHandlers){
 		.load = workout_window_load,
