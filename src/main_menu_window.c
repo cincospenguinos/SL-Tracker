@@ -1,6 +1,8 @@
 #include <pebble.h>
 #include "main_menu_window.h"
 #include "workout_window.h"
+#include "log_menu_window.h"
+#include "model.h"
 
 /*
  * Instance variables
@@ -51,12 +53,12 @@ void main_menu_window_load(Window *window){
 	
 	// setup the one section we have
 	sections[0] = (SimpleMenuSection){
-		.num_items = 5,
+		.num_items = 4,
 		.items = menu_items
 	};
 	
 	// create the layer
-	main_menu_layer = simple_menu_layer_create(GRect(0, 0, 144, 168), window, sections, 1, NULL);
+	main_menu_layer = simple_menu_layer_create(layer_get_frame(window_get_root_layer(window)), window, sections, 1, NULL);
 	
 	// add it to the window
 	layer_add_child(window_get_root_layer(window), simple_menu_layer_get_layer(main_menu_layer));
@@ -66,9 +68,11 @@ void main_menu_window_load(Window *window){
 void main_menu_window_unload(){
 	simple_menu_layer_destroy(main_menu_layer);
 	
-	if(workout_window != NULL){
+	if(workout_window != NULL)
 		window_destroy(workout_window);
-	}
+	
+	if(log_menu_window != NULL)
+		window_destroy(log_menu_window);
 }
 
 /*
@@ -86,8 +90,22 @@ void setup_workout_callback(){
 }
 
 /* Called when the user wants to check the old workouts he/she has */
-void view_log_callback(){
-	// TODO: Implement this
+void view_log_callback(int index, void *ctx){
+	// If we have workouts, we will show them
+	int workout_count = get_workout_count();
+	if(workout_count > 0)	{
+		SimpleMenuItem items[workout_count];
+		log_menu_window_init(items);
+		APP_LOG(APP_LOG_LEVEL_INFO, "Initiated the log menu");
+	}
+	
+	// Otherwise, let the user know that there aren't any
+	else {
+		menu_items[index].subtitle = "No workouts to show!";
+		layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
+	}
+	
+	APP_LOG(APP_LOG_LEVEL_INFO, "Leaving log_menu_callback");
 }
 
 /* Called when the user selects to delete the workout log */

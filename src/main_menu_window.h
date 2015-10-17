@@ -6,7 +6,6 @@
 
 #pragma once
 #include<pebble.h>
-#include "model.h"
 
 /*
  * Instance variables
