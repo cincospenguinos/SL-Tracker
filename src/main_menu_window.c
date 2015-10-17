@@ -1,7 +1,6 @@
 #include <pebble.h>
 #include "main_menu_window.h"
 #include "workout_window.h"
-#include "log_menu_window.h"
 #include "model.h"
 
 /*
@@ -70,9 +69,6 @@ void main_menu_window_unload(){
 	
 	if(workout_window != NULL)
 		window_destroy(workout_window);
-	
-	if(log_menu_window != NULL)
-		window_destroy(log_menu_window);
 }
 
 /*
@@ -85,27 +81,18 @@ void new_workout_callback(){
 }
 
 /* Called when the user wants to setup the workout */
-void setup_workout_callback(){
+void setup_workout_callback() {
 	// TODO: Implement this
 }
 
 /* Called when the user wants to check the old workouts he/she has */
-void view_log_callback(int index, void *ctx){
-	// If we have workouts, we will show them
-	int workout_count = get_workout_count();
-	if(workout_count > 0)	{
-		SimpleMenuItem items[workout_count];
-		log_menu_window_init(items);
-		APP_LOG(APP_LOG_LEVEL_INFO, "Initiated the log menu");
-	}
-	
-	// Otherwise, let the user know that there aren't any
-	else {
+void view_log_callback(int index, void *ctx) {
+	if(get_workout_count() == 0){
 		menu_items[index].subtitle = "No workouts to show!";
 		layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
+	} else {
+		// TODO: Implement this
 	}
-	
-	APP_LOG(APP_LOG_LEVEL_INFO, "Leaving log_menu_callback");
 }
 
 /* Called when the user selects to delete the workout log */

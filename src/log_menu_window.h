@@ -1,38 +1,41 @@
 /**
  * log_menu_window.h
  *
- * The menu that shows all of the old workouts
+ * Contains all the old workouts for the application. Loads them up dynamically.
  */
-
 #pragma once
 #include <pebble.h>
-#include "model.h"
 
+Window *log_menu_window; // The window that houses it all
 
-/*
- * Instance variables
- */
+MenuLayer *log_menu_layer; // The layer that houses it all
 
-Window *log_menu_window; // The window itself
-
-int old_workout_count; // The total number of menu items that we will show
-
-SimpleMenuLayer *log_menu; // The menu layer that will show all of the old workouts
-SimpleMenuItem old_workouts[old_workout_count]; // This will be a pointer to an array of all of the items we need
-SimpleMenuSection sections[1]; // We will only have one single section
-
-/* log_menu_window init function */
-void log_menu_window_init(SimpleMenuItem *items);
+/* log_menu_init() function */
+void log_menu_init();
 
 /*
  * Window Handlers
  */
 
-/* Called when the window is loaded onto the stack */
-void log_menu_window_load(Window *window);
+void log_menu_load();
 
-/* Called when the window is popped off the stack */
-void log_menu_window_unload(Window *window);
+void log_menu_unload();
 
-/* Called when an old workout is selected to be viewed */
-void old_workout_selected_callback(int index, void *ctx);
+/*
+ * Callbacks - so many callbacks...
+ */
+
+/* Returns the number of sections for the menu */
+int get_num_sections_callback(MenuLayer *layer, void *data);
+
+/* Returns the number of rows (or old workouts) */
+int get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+
+/* Returns the header height */
+int get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+
+/* Draws the row at the index given */
+void draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data);
+
+/* Runs when a row is selected */
+void row_selected_drawback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data);
