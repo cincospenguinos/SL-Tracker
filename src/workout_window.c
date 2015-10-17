@@ -21,9 +21,9 @@ void workout_window_init(){
 	// Reset the values of the various data members to ensure no weirdness
 	for(int i = 0; i < 3; i++)
 		for(int j = 0; j < 5; j++)
-			reps_per_exercise[i][j] = 0;
+			reps_per_exercise[i][j] = 5;
 		
-	current_rep_count = 0;
+	current_rep_count = 5;
 	current_exercise_index = 0;
 	timer_count = 0;
 	current_working_set = 0;
@@ -77,7 +77,7 @@ void workout_window_load(Window *window){
 		sets[i] = text_layer_create(GRect(12 + (i * 28), 80, 16, 20));
 		text_layer_set_font(sets[i], fonts_get_system_font(FONT_KEY_GOTHIC_14));
 		text_layer_set_text_alignment(sets[i], GTextAlignmentCenter);
-		text_layer_set_text(sets[i], "0");
+		text_layer_set_text(sets[i], "5");
 		layer_add_child(window_get_root_layer(window), text_layer_get_layer(sets[i]));
 	}
 	

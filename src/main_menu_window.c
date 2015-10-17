@@ -2,6 +2,7 @@
 #include "main_menu_window.h"
 #include "workout_window.h"
 #include "model.h"
+#include "log_menu_window.h"
 
 /*
  * Instance variables
@@ -69,6 +70,9 @@ void main_menu_window_unload(){
 	
 	if(workout_window != NULL)
 		window_destroy(workout_window);
+	
+	if(log_menu_window != NULL)
+		window_destroy(log_menu_window);
 }
 
 /*
@@ -87,11 +91,15 @@ void setup_workout_callback() {
 
 /* Called when the user wants to check the old workouts he/she has */
 void view_log_callback(int index, void *ctx) {
+	// If there's no workouts to show, let the user know
 	if(get_workout_count() == 0){
 		menu_items[index].subtitle = "No workouts to show!";
 		layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
-	} else {
-		// TODO: Implement this
+	} 
+	
+	// Otherwise, show them
+	else {
+		log_menu_init();
 	}
 }
 

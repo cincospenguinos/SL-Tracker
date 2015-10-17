@@ -17,25 +17,35 @@ void log_menu_init();
  * Window Handlers
  */
 
-void log_menu_load();
+void log_menu_window_load(Window *window);
 
-void log_menu_unload();
+void log_menu_window_unload(Window *window);
 
 /*
  * Callbacks - so many callbacks...
  */
 
 /* Returns the number of sections for the menu */
-int get_num_sections_callback(MenuLayer *layer, void *data);
+uint16_t  get_num_sections_callback(MenuLayer *layer, void *data);
 
 /* Returns the number of rows (or old workouts) */
-int get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+uint16_t  get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
 
 /* Returns the header height */
-int get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+int16_t  get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+
+/* Draws the header of the section or whatever */
+void draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data);
 
 /* Draws the row at the index given */
 void draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data);
 
 /* Runs when a row is selected */
-void row_selected_drawback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data);
+void row_selected_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data);
+
+/*
+ * Helper methods
+ */
+
+/* Returns three letter code to represent the month */
+const char * int_to_month(int month);
