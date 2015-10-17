@@ -420,6 +420,35 @@ void nuke_all_old_workouts(){
 	persist_delete(WORKOUT_LOG_COUNT_KEY);
 }
 
+/* Converts an integer to a three letter code representing the month */
+const char * int_to_month(int month){
+	switch(month){
+		case 0:
+			return "JAN";
+		case 1:
+			return "FEB";
+		case 2:
+			return "MAR";
+		case 3:
+			return "APR";
+		case 4:
+			return "MAY";
+		case 5:
+			return "JUN";
+		case 6:
+			return "JUL";
+		case 7:
+			return "AUG";
+		case 8:
+			return "SEP";
+		case 9:
+			return "OCT";
+		case 10:
+			return "NOV";
+		default:
+			return "DEC";
+	}
+}
 
 
 

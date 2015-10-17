@@ -110,3 +110,6 @@ void migrate_old_workouts();
 
 /* Deletes all persistant data with this application */
 void nuke_all_old_workouts();
+
+/* Converts an integer to a three letter code representing the month */
+const char * int_to_month(int month);

@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "log_menu_window.h"
+#include "old_entry_window.h"
 #include "model.h"
 
 /* log_menu_init() function */
@@ -40,6 +41,9 @@ void log_menu_window_load(Window *window){
 
 void log_menu_window_unload(Window *window){
 	menu_layer_destroy(log_menu_layer);
+	
+	if(old_entry_window != NULL)
+		window_destroy(old_entry_window);
 }
 
 /*
@@ -84,41 +88,8 @@ void draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_i
 
 /* Runs when a row is selected */
 void row_selected_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
-	// TODO: Implement this
-}
-
-/*
- * Helper functions
- */
-
-/* Converts an integer to a three letter code representing the month */
-const char * int_to_month(int month){
-	switch(month){
-		case 0:
-			return "JAN";
-		case 1:
-			return "FEB";
-		case 2:
-			return "MAR";
-		case 3:
-			return "APR";
-		case 4:
-			return "MAY";
-		case 5:
-			return "JUN";
-		case 6:
-			return "JUL";
-		case 7:
-			return "AUG";
-		case 8:
-			return "SEP";
-		case 9:
-			return "OCT";
-		case 10:
-			return "NOV";
-		default:
-			return "DEC";
-	}
+	int selected_index = cell_index->row;
+	old_entry_window_init(selected_index);
 }
 
 
