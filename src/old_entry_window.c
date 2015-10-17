@@ -9,7 +9,7 @@ void old_entry_window_init(int index){
 	// We use the index to get the Workout that we need to keep track of
 	current_index = index;
 	
-	if(old_entry_window != NULL)
+	if (old_entry_window == NULL)
 		old_entry_window = window_create();
 	
 	window_set_window_handlers(old_entry_window, (WindowHandlers){
