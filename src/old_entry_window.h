@@ -12,31 +12,14 @@ Window *old_entry_window; // The window that shows the old workout
 /* Instance variables */
 TextLayer *date_text; // The date that the workout was performed
 
-// TODO: FullExerciseText? Arrays of text layers?
+TextLayer *exercises[3]; // The collection of all the text layers to show old exercises
+TextLayer *weights[3]; // The collection of weight for each exercise
+TextLayer *sets[3]; // The collection of reps per set for each exercise
 
-/* Structure definition for FullExerciseText */
-typedef struct{
-	TextLayer *exercises;
-	TextLayer *weights;
-	TextLayer *sets;
-}FullExerciseText;
-
-TextLayer *exercise1; // The first exercise
-TextLayer *exercise2; // The second exercise
-TextLayer *exercise3; // The third exercise
-
-TextLayer *weight1; // The weight for the first exercise
-TextLayer *weight2; // The weight for the second exercise
-TextLayer *weight3; // The weight for the third exercise
-
-TextLayer *sets1; // The sets for the first exercise
-TextLayer *sets2; // The sets for the second exercise
-TextLayer *sets3; // The sets for the third exercise
-
-int current_index; // The current index that we are governing now
+int *current_index; // The current index that we are governing now
 
 /* old_entry_init function */
-void old_entry_window_init(int index); // The index to the workout that we are checking out
+void old_entry_window_init(int *index); // The index to the workout that we are checking out
 
 /*
  * Window Handlers

@@ -42,8 +42,8 @@ void log_menu_window_load(Window *window){
 void log_menu_window_unload(Window *window){
 	menu_layer_destroy(log_menu_layer);
 	
-	if(old_entry_window != NULL)
-		window_destroy(old_entry_window);
+// 	if(old_entry_window != NULL)
+// 		window_destroy(old_entry_window);
 }
 
 /*
@@ -89,7 +89,7 @@ void draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_i
 /* Runs when a row is selected */
 void row_selected_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
 	int selected_index = cell_index->row;
-	old_entry_window_init(selected_index);
+	old_entry_window_init(&selected_index);
 	APP_LOG(APP_LOG_LEVEL_INFO, "Index: %i", selected_index);
 }
 
