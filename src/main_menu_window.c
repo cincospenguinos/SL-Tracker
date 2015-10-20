@@ -80,13 +80,19 @@ void main_menu_window_unload(){
  */
 
 /* Called when a new workout is to be created */
-void new_workout_callback(){
+void new_workout_callback(int index, void *ctx){
 	workout_window_init();
+	
+	menu_items[2].subtitle = "Check old workouts";
+	layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
 }
 
 /* Called when the user wants to setup the workout */
-void setup_workout_callback() {
+void setup_workout_callback(int index, void *ctx) {
 	// TODO: Implement this
+	
+	menu_items[2].subtitle = "Check old workouts";
+	layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
 }
 
 /* Called when the user wants to check the old workouts he/she has */
@@ -104,6 +110,9 @@ void view_log_callback(int index, void *ctx) {
 }
 
 /* Called when the user selects to delete the workout log */
-void delete_log_callback(){
+void delete_log_callback(int index, void *ctx){
 	// TODO: Implement this
+	
+	menu_items[2].subtitle = "Check old workouts";
+	layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));
 }

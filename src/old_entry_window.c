@@ -168,11 +168,22 @@ void update_text_layers(Workout workout){
 						workout.exercise2.reps[2], workout.exercise2.reps[3], workout.exercise2.reps[4]);
 	}
 	
-	if(sum3 == 25){
-		snprintf(sets_text[2], sizeof(sets_text[2]), "%s", "5x5");
-	} else {
-		snprintf(sets_text[2], sizeof(sets_text[2]), "%i %i %i %i %i", workout.exercise3.reps[0], workout.exercise3.reps[1],
-						workout.exercise3.reps[2], workout.exercise3.reps[3], workout.exercise3.reps[4]);
+	// A day
+	if(!workout.day_type){
+		if(sum3 == 25){
+			snprintf(sets_text[2], sizeof(sets_text[2]), "%s", "5x5");
+		} else {
+			snprintf(sets_text[2], sizeof(sets_text[2]), "%i %i %i %i %i", workout.exercise3.reps[0], workout.exercise3.reps[1],
+							workout.exercise3.reps[2], workout.exercise3.reps[3], workout.exercise3.reps[4]);
+		}
+	} 
+	
+	// B day
+	else {
+		if(workout.exercise3.reps[2] == 5)
+			snprintf(sets_text[2], sizeof(sets_text[2]), "5x1");
+		else
+			snprintf(sets_text[2], sizeof(sets_text[2]), "%i", workout.exercise3.reps[2]);
 	}
 	
 	// Store the text in their various layers
