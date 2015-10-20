@@ -113,3 +113,10 @@ void nuke_all_old_workouts();
 
 /* Converts an integer to a three letter code representing the month */
 const char * int_to_month(int month);
+
+/*
+ * Debugging functions
+ */
+
+void print_out_workout(int index);
+void print_out_workout_struct(Workout workout);

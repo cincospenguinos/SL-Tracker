@@ -155,26 +155,31 @@ void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, in
 	workout.exercise3 = exercise3;
 	
 	store_new_workout(workout);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Storing a workout.");
+	print_out_workout_struct(workout);
 }
 
 /* Pulls the workout out from the index passed */
 Workout get_workout(int index, int *sets1, int *sets2, int *sets3) {
 	Workout result;
 	int model_index = WORKOUT_LOG_START_KEY + index * 3;
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Index to get workout from model: %i", model_index);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Index passed in: %i", index);
 	
 	if(persist_exists(model_index)){
 		int storedA = persist_read_int(model_index);
 		int storedB = persist_read_int(model_index + 1);
 		int storedC = persist_read_int(model_index + 2);
 		
-		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index);
-		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index + 1);
-		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", model_index + 2);
+		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", index);
 		
 		result = convert_int_to_workout(storedA, storedB, storedC, sets1, sets2, sets3);
 	} else {
 		APP_LOG(APP_LOG_LEVEL_ERROR, "Entry could not be found at %i!", index);
 	}
+	
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Pulling out a workout.");
+	print_out_workout_struct(result);
 	
 	return result;
 }
@@ -343,9 +348,10 @@ Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1
 	ex1.reps[1] = (storedA & 0x00000007);
 	
 	// Get all the stuff from storedB
-	ex1.reps[2] = (storedB >> 29);
+	ex1.reps[2] = (storedB >> 29) & 0x00000007;
 	ex1.reps[3] = ((storedB & 0x1FFFFFFF) >> 26);
 	ex1.reps[4] = ((storedB & 0x03FFFFFF) >> 23);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "When decoding a workout, rep 3 for the first exercise was %i", ex1.reps[2]);
 	
 	ex2.weight = ((storedB & 0x007FFFFF) >> 15) * 5; // Don't forget to multiply by five!
 	
@@ -451,7 +457,34 @@ const char * int_to_month(int month){
 }
 
 
+/*
+ * Debugging functions
+ */
 
+void print_out_workout(int index){
+	int sets1[5];
+	int sets2[5];
+	int sets3[5];
+	
+	Workout workout = get_workout(index, sets1, sets2, sets3);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Printing workout at index %i\n", index);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise1.name, workout.exercise1.weight, workout.exercise1.reps[0],
+				 workout.exercise1.reps[1], workout.exercise1.reps[2], workout.exercise1.reps[3], workout.exercise1.reps[4]);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise2.name, workout.exercise2.weight, workout.exercise2.reps[0],
+				 workout.exercise2.reps[1], workout.exercise2.reps[2], workout.exercise2.reps[3], workout.exercise2.reps[4]);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise3.name, workout.exercise3.weight, workout.exercise3.reps[0],
+				 workout.exercise3.reps[1], workout.exercise3.reps[2], workout.exercise3.reps[3], workout.exercise3.reps[4]);
+}
+
+void print_out_workout_struct(Workout workout){
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Printing workout");
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise1.name, workout.exercise1.weight, workout.exercise1.reps[0],
+				 workout.exercise1.reps[1], workout.exercise1.reps[2], workout.exercise1.reps[3], workout.exercise1.reps[4]);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise2.name, workout.exercise2.weight, workout.exercise2.reps[0],
+				 workout.exercise2.reps[1], workout.exercise2.reps[2], workout.exercise2.reps[3], workout.exercise2.reps[4]);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s @ %i lbs => %i %i %i %i %i", workout.exercise3.name, workout.exercise3.weight, workout.exercise3.reps[0],
+				 workout.exercise3.reps[1], workout.exercise3.reps[2], workout.exercise3.reps[3], workout.exercise3.reps[4]);
+}
 
 
 

@@ -2,7 +2,7 @@
 #include "old_entry_window.h"
 
 /* old_entry_init function */
-void old_entry_window_init(int *index){
+void old_entry_window_init(int index){
 	current_index = index;
 	
 	if(old_entry_window == NULL){
@@ -56,7 +56,7 @@ void old_entry_window_load(Window *window){
 	int sets2[5];
 	int sets3[5];
 	
-	Workout current_workout = get_workout(*current_index, sets1, sets2, sets3);
+	Workout current_workout = get_workout(current_index, sets1, sets2, sets3);
 	
 	// Then update the text layers
 	update_text_layers(current_workout);
@@ -87,17 +87,33 @@ void old_entry_window_click_config_provider(Window *window){
 /* Runs with a single up click */
 void old_entry_window_single_up_click(ClickRecognizerRef recognizer, void *context){
 	// If the current index is bigger than zero, then we will move down a workout and show that
-	if(*current_index > 0){
-		// TODO: this
+	if(current_index > 0){
+		current_index--;
+		int sets1[5];
+		int sets2[5];
+		int sets3[5];
+		
+		Workout workout = get_workout(current_index, sets1, sets2, sets3);
+		update_text_layers(workout);
 	}
+	
+	print_out_workout(current_index);
 }
 
 /* Runs with a single down click */
 void old_entry_window_single_down_click(ClickRecognizerRef recognizer, void *context){
 	// If there are more workouts, get the next one and show it
-	if(*current_index < get_workout_count() - 1){
-		// TODO: this
+	if(current_index < get_workout_count() - 1){
+		current_index++;
+		int sets1[5];
+		int sets2[5];
+		int sets3[5];
+		
+		Workout workout = get_workout(current_index, sets1, sets2, sets3);
+		update_text_layers(workout);
 	}
+	
+// 	print_out_workout(current_index);
 }
 
 /*
@@ -107,7 +123,7 @@ void old_entry_window_single_down_click(ClickRecognizerRef recognizer, void *con
 int get_sum(const int *array, int array_length){
 	int sum = 0;
 	for(int i = 0; i < array_length; i++)
-		sum += array[array_length];
+		sum += array[i];
 	
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "sum: %i", sum);
 	

@@ -16,10 +16,10 @@ TextLayer *exercises[3]; // The collection of all the text layers to show old ex
 TextLayer *weights[3]; // The collection of weight for each exercise
 TextLayer *sets[3]; // The collection of reps per set for each exercise
 
-int *current_index; // The current index that we are governing now
+int current_index; // The current index that we are governing now
 
 /* old_entry_init function */
-void old_entry_window_init(int *index); // The index to the workout that we are checking out
+void old_entry_window_init(int index); // The index to the workout that we are checking out
 
 /*
  * Window Handlers
