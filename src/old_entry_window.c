@@ -96,8 +96,6 @@ void old_entry_window_single_up_click(ClickRecognizerRef recognizer, void *conte
 		Workout workout = get_workout(current_index, sets1, sets2, sets3);
 		update_text_layers(workout);
 	}
-	
-	print_out_workout(current_index);
 }
 
 /* Runs with a single down click */
@@ -112,8 +110,6 @@ void old_entry_window_single_down_click(ClickRecognizerRef recognizer, void *con
 		Workout workout = get_workout(current_index, sets1, sets2, sets3);
 		update_text_layers(workout);
 	}
-	
-// 	print_out_workout(current_index);
 }
 
 /*
@@ -124,8 +120,6 @@ int get_sum(const int *array, int array_length){
 	int sum = 0;
 	for(int i = 0; i < array_length; i++)
 		sum += array[i];
-	
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "sum: %i", sum);
 	
 	return sum;
 }

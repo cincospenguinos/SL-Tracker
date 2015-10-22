@@ -3,6 +3,7 @@
 #include "workout_window.h"
 #include "model.h"
 #include "log_menu_window.h"
+#include "setup_workout_window.h"
 
 /*
  * Instance variables
@@ -73,6 +74,9 @@ void main_menu_window_unload(){
 	
 	if(log_menu_window != NULL)
 		window_destroy(log_menu_window);
+	
+	if(setup_workout_window != NULL)
+		window_destroy(setup_workout_window);
 }
 
 /*
@@ -89,7 +93,7 @@ void new_workout_callback(int index, void *ctx){
 
 /* Called when the user wants to setup the workout */
 void setup_workout_callback(int index, void *ctx) {
-	// TODO: Implement this
+	setup_workout_window_init();
 	
 	menu_items[2].subtitle = "Check old workouts";
 	layer_mark_dirty(simple_menu_layer_get_layer(main_menu_layer));

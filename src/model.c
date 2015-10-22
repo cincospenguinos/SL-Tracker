@@ -51,7 +51,6 @@ void init_model() {
 /* Toggles the boolean A/B day type */
 void toggle_next_workout(){
 	bool type_of_day = persist_read_bool(WORKOUT_TYPE_KEY);
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Toggling workout day from %i to %i", type_of_day, !type_of_day);
 	
 	type_of_day = !type_of_day;
 	persist_write_bool(WORKOUT_TYPE_KEY, type_of_day);
@@ -71,7 +70,6 @@ void store_new_workout(Workout workout) {
 	persist_write_int(write_index + 2, workout_intC);
 
 	int some_index = persist_read_int(WORKOUT_LOG_COUNT_KEY);	
-	APP_LOG(APP_LOG_LEVEL_INFO, "Writing to index: %i", some_index);
 	
 	// Add one to the count
 	persist_write_int(WORKOUT_LOG_COUNT_KEY, persist_read_int(WORKOUT_LOG_COUNT_KEY) + 1);
@@ -155,8 +153,6 @@ void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, in
 	workout.exercise3 = exercise3;
 	
 	store_new_workout(workout);
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Storing a workout.");
-	print_out_workout_struct(workout);
 }
 
 /* Pulls the workout out from the index passed */
@@ -177,9 +173,6 @@ Workout get_workout(int index, int *sets1, int *sets2, int *sets3) {
 	} else {
 		APP_LOG(APP_LOG_LEVEL_ERROR, "Entry could not be found at %i!", index);
 	}
-	
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Pulling out a workout.");
-	print_out_workout_struct(result);
 	
 	return result;
 }
@@ -351,7 +344,6 @@ Workout convert_int_to_workout(int storedA, int storedB, int storedC, int *sets1
 	ex1.reps[2] = (storedB >> 29) & 0x00000007;
 	ex1.reps[3] = ((storedB & 0x1FFFFFFF) >> 26);
 	ex1.reps[4] = ((storedB & 0x03FFFFFF) >> 23);
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "When decoding a workout, rep 3 for the first exercise was %i", ex1.reps[2]);
 	
 	ex2.weight = ((storedB & 0x007FFFFF) >> 15) * 5; // Don't forget to multiply by five!
 	
