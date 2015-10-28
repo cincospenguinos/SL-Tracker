@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "setup_workout_window.h"
+#include "set_weight_window.h"
 
 /* The init function */
 void setup_workout_window_init(){
@@ -46,7 +47,7 @@ void setup_workout_window_load(Window *window){
 	};
 	
 	setup_workout_menu_items[4] = (SimpleMenuItem){
-		.title = "Overhead Press Weight",
+		.title = "OH Press Weight",
 		.subtitle = "Set OHP weight",
 		.callback = setup_workout_window_select_callback
 	};
@@ -71,7 +72,8 @@ void setup_workout_window_load(Window *window){
 void setup_workout_window_unload(Window *window) {
 	simple_menu_layer_destroy(setup_workout_menu);
 	
-// 	window_stack_pop(true);
+	if(set_weight_window != NULL)
+		window_destroy(set_weight_window);
 }
 
 /*
@@ -79,5 +81,10 @@ void setup_workout_window_unload(Window *window) {
  */
 
 void setup_workout_window_select_callback(int index, void *ctx){
-	// TODO: Implement this
+	
+	if(index == 0){
+		// TODO: set_workout_day_window()
+	} else {
+		set_weight_window_init(index - 1);
+	}
 }

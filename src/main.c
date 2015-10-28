@@ -6,7 +6,6 @@
 #include <pebble.h>
 #include "main_menu_window.h"
 #include "model.h"
-// #include "old_entry_window.h"
 
 void init(){
 	init_model();

@@ -85,6 +85,13 @@ int get_bent_rows_weight();
 int get_overhead_weight();
 int get_deadlifts_weight();
 
+/* Set weight for various exercises; always in pounds */
+void set_squat_weight(int);
+void set_bench_weight(int);
+void set_bent_rows_weight(int);
+void set_overhead_weight(int);
+void set_deadlifts_weight(int);
+
 
 /*
  * Conversion functions - converts ints to structs and back

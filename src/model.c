@@ -258,6 +258,22 @@ int get_deadlifts_weight(){
 	return persist_read_int(DEADLIFT_WEIGHT_KEY);
 }
 
+void set_squat_weight(int weight){
+	persist_write_int(SQUAT_WEIGHT_KEY, weight);
+}
+void set_bench_weight(int weight){
+	persist_write_int(BENCH_WEIGHT_KEY, weight);
+}
+void set_bent_rows_weight(int weight){
+	persist_write_int(BENT_WEIGHT_KEY, weight);
+}
+void set_overhead_weight(int weight){
+	persist_write_int(OVERHEAD_WEIGHT_KEY, weight);
+}
+void set_deadlifts_weight(int weight){
+	persist_write_int(DEADLIFT_WEIGHT_KEY, weight);
+}
+
 /*
  * Conversion functions - converts ints to structs and back
  */
