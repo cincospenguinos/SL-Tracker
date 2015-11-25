@@ -12,8 +12,7 @@
  */
 
 Window *main_menu_window; // The window itself
-
-MenuLayer *main_menu_layer;
+MenuLayer *main_menu_layer; // The menu layer
 
 /* Init function */
 void main_menu_window_init();

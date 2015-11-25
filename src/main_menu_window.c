@@ -6,7 +6,7 @@
 #include "setup_workout_window.h"
 
 /* Init function */
-void main_menu_window_init(){
+void main_menu_window_init(){	
 	main_menu_window = window_create();
 	
 	window_set_window_handlers(main_menu_window, (WindowHandlers){
@@ -65,7 +65,6 @@ void main_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint
 }
 
 void main_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){
-	// TODO: This
 	switch(cell_index->row){
 		case 0:
 			menu_cell_basic_draw(ctx, cell_layer, "Start Workout", "Start a new workout", NULL);
@@ -74,7 +73,10 @@ void main_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuInd
 			menu_cell_basic_draw(ctx, cell_layer, "Set Workout", "Setup next workout", NULL);
 			break;
 		case 2:
-			menu_cell_basic_draw(ctx, cell_layer, "View Log", "View old workouts", NULL);
+			if(get_workout_count() != 0)
+				menu_cell_basic_draw(ctx, cell_layer, "View Log", "View old workouts", NULL);
+			else
+				menu_cell_basic_draw(ctx, cell_layer, "View Log", "No workouts to show!", NULL);
 			break;
 		case 3:
 			menu_cell_basic_draw(ctx, cell_layer, "Delete Log", "Delete all old workouts", NULL);
