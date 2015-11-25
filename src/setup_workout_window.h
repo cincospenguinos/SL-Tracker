@@ -9,10 +9,7 @@
 
 Window *setup_workout_window; // The window we are going to use
 
-SimpleMenuLayer *setup_workout_menu; // The menu that will be used to show everything to the user
-
-SimpleMenuItem setup_workout_menu_items[6]; // The various menu items for this menu
-SimpleMenuSection sections[1]; // the various sections - just one in our case
+MenuLayer *setup_workout_menu; // The menu that will be used to show everything to the user
 
 /* The init function */
 void setup_workout_window_init();
@@ -25,7 +22,12 @@ void setup_workout_window_load(Window *);
 void setup_workout_window_unload(Window *);
 
 /*
- * Select callbacks
+ * All of the callbacks
  */
 
-void setup_workout_window_select_callback(int index, void *ctx);
+uint16_t setup_workout_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data);
+uint16_t setup_workout_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+int16_t setup_workout_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data);
+void setup_workout_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data);
+void setup_workout_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data);
+void setup_workout_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data);

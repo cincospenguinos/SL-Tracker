@@ -1,11 +1,9 @@
 #include <pebble.h>
 #include "setup_workout_window.h"
-#include "set_weight_window.h"
 
 /* The init function */
 void setup_workout_window_init(){
-	if(setup_workout_window == NULL)
-		setup_workout_window = window_create();
+	setup_workout_window = window_create();
 	
 	window_set_window_handlers(setup_workout_window, (WindowHandlers){
 		.load = setup_workout_window_load,
@@ -20,71 +18,79 @@ void setup_workout_window_init(){
  */
 
 void setup_workout_window_load(Window *window){
+	setup_workout_menu = menu_layer_create(layer_get_bounds(window_get_root_layer(window)));
 	
-	// Setup the simple menu items
-	setup_workout_menu_items[0] = (SimpleMenuItem){
-		.title = "Change day",
-		.subtitle = "Change next workout",
-		.callback = setup_workout_window_select_callback
-	};
+	menu_layer_set_callbacks(setup_workout_menu, NULL, (MenuLayerCallbacks){
+		.get_num_sections = setup_workout_menu_get_num_sections_callback,
+		.get_num_rows = setup_workout_menu_get_num_rows_callback,
+		.get_header_height = setup_workout_menu_get_header_height_callback,
+		.draw_header = setup_workout_menu_draw_header_callback,
+		.draw_row = setup_workout_menu_draw_row_callback,
+		.select_click = setup_workout_menu_select_callback
+	});
 	
-	setup_workout_menu_items[1] = (SimpleMenuItem){
-		.title = "Squat Weight",
-		.subtitle = "Set squat weight",
-		.callback = setup_workout_window_select_callback
-	};
+	menu_layer_set_click_config_onto_window(setup_workout_menu, window);
 	
-	setup_workout_menu_items[2] = (SimpleMenuItem){
-		.title = "Bench Weight",
-		.subtitle = "Set bench press weight",
-		.callback = setup_workout_window_select_callback
-	};
-	
-	setup_workout_menu_items[3] = (SimpleMenuItem){
-		.title = "Bent Rows Weight",
-		.subtitle = "Set bent rows weight",
-		.callback = setup_workout_window_select_callback
-	};
-	
-	setup_workout_menu_items[4] = (SimpleMenuItem){
-		.title = "OH Press Weight",
-		.subtitle = "Set OHP weight",
-		.callback = setup_workout_window_select_callback
-	};
-	
-	setup_workout_menu_items[5] = (SimpleMenuItem){
-		.title = "Deadlift Weight",
-		.subtitle = "Change deadlift weight",
-		.callback = setup_workout_window_select_callback
-	};
-	
-	// Setup the sections
-	sections[0] = (SimpleMenuSection){
-		.num_items = 6,
-		.items = setup_workout_menu_items
-	};
-	
-	// add the menu to the window
-	setup_workout_menu = simple_menu_layer_create(layer_get_frame(window_get_root_layer(window)), window, sections, 1, NULL);
-	layer_add_child(window_get_root_layer(window), simple_menu_layer_get_layer(setup_workout_menu));
+	layer_add_child(window_get_root_layer(window), menu_layer_get_layer(setup_workout_menu));
 }
 
-void setup_workout_window_unload(Window *window) {
-	simple_menu_layer_destroy(setup_workout_menu);
-	
-	if(set_weight_window != NULL)
-		window_destroy(set_weight_window);
+void setup_workout_window_unload(Window *window){
+	menu_layer_destroy(setup_workout_menu);
 }
 
 /*
  * Select callbacks
  */
 
-void setup_workout_window_select_callback(int index, void *ctx){
-	
-	if(index == 0){
-		// TODO: set_workout_day_window()
-	} else {
-		set_weight_window_init(index - 1);
+uint16_t setup_workout_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
+	return 1;
+}
+
+uint16_t setup_workout_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
+	return 6;
+}
+
+int16_t setup_workout_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
+	return MENU_CELL_BASIC_HEADER_HEIGHT;
+}
+
+void setup_workout_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data){
+	menu_cell_basic_header_draw(ctx, cell_layer, "");
+}
+
+void setup_workout_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){
+	switch(cell_index->row){
+		case 0:
+			menu_cell_basic_draw(ctx, cell_layer, "Change Day", "Set to A or B", NULL);
+			break;
+		case 1:
+			menu_cell_basic_draw(ctx, cell_layer, "Squat Weight", "Set squat weight", NULL);
+			break;
+		case 2:
+			menu_cell_basic_draw(ctx, cell_layer, "Bench Weight", "Set bench weight", NULL);
+			break;
+		case 3:
+			menu_cell_basic_draw(ctx, cell_layer, "Bent Weight", "Set bent rows weight", NULL);
+			break;
+		case 4:
+			menu_cell_basic_draw(ctx, cell_layer, "OH Weight", "Set OHP weight", NULL);
+			break;
+		case 5:
+			menu_cell_basic_draw(ctx, cell_layer, "Deadlift Weight", "Set deadlift weight", NULL);
+			break;
+	}
+}
+
+void setup_workout_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
+	switch(cell_index->row){
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			break;
+		default:
+			break;
 	}
 }
