@@ -118,7 +118,7 @@ void update_version1_workouts();
 /* Migrate all of the old workouts to the new workouts */
 void migrate_old_workouts();
 
-/* Deletes all persistant data with this application */
+/* Deletes ONLY the old workout log info */
 void nuke_all_old_workouts();
 
 /* Converts an integer to a three letter code representing the month */

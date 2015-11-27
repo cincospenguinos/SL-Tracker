@@ -72,7 +72,7 @@ void workout_window_load(Window *window){
 	
 	// sets text layers
 	for(int i = 0; i < 5; i++){
-		sets[i] = text_layer_create(GRect(12 + (i * 28), 80, 16, 20));
+		sets[i] = text_layer_create(GRect(10 + (i * 28), 80, 16, 20));
 		text_layer_set_font(sets[i], fonts_get_system_font(FONT_KEY_GOTHIC_14));
 		text_layer_set_text_alignment(sets[i], GTextAlignmentCenter);
 		text_layer_set_text(sets[i], "5");
@@ -80,7 +80,7 @@ void workout_window_load(Window *window){
 	}
 	
 	// selected set layer to show what is the current working set
-	selected_set_layer = inverter_layer_create(GRect(12, 80, 16, 20));
+	selected_set_layer = inverter_layer_create(GRect(11, 80, 17, 20));
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(selected_set_layer));
 	
 	// motivation text layer

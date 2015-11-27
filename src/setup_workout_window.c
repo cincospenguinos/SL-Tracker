@@ -38,12 +38,6 @@ void setup_workout_window_load(Window *window){
 
 void setup_workout_window_unload(Window *window){
 	menu_layer_destroy(setup_workout_menu);
-	
-	if(set_day_type_window != NULL)
-		window_destroy(set_day_type_window);
-	
-	if(set_weight_window != NULL)
-		window_destroy(set_weight_window);
 }
 
 /*
@@ -59,11 +53,11 @@ uint16_t setup_workout_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_
 }
 
 int16_t setup_workout_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-	return MENU_CELL_BASIC_HEADER_HEIGHT;
+	return 0; // We won't have a header
 }
 
 void setup_workout_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data){
-	menu_cell_basic_header_draw(ctx, cell_layer, "");
+// 	menu_cell_basic_header_draw(ctx, cell_layer, "");
 }
 
 void setup_workout_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){

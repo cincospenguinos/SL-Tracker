@@ -19,7 +19,7 @@
 #define BENT_WEIGHT_KEY 4 // Integer containing the current weight of the next bent rows
 #define OVERHEAD_WEIGHT_KEY 5 // Integer containing the current weight of the next overhead press
 #define DEADLIFT_WEIGHT_KEY 6 // Integer containing the current weight of the next deadlift
-#define WORKOUT_LOG_COUNT_KEY 7 // The total number of old workouts is located
+#define WORKOUT_LOG_COUNT_KEY 7 // The total number of old workouts is located here
 #define WORKOUT_LOG_START_KEY 8 // Where the workout log starts
 
 /*
@@ -29,7 +29,11 @@
 /* Sets up the persistent data. */
 void init_model() {
 	// If we don't have any existing persistent data, then we need to set it up
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Should we reinitialize the model? %i", !persist_exists(WORKOUT_LOG_COUNT_KEY));
+	
 	if(!persist_exists(WORKOUT_LOG_COUNT_KEY)) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Initiating the model");
+		
 		// We have no logged workouts
 		persist_write_int(WORKOUT_LOG_COUNT_KEY, 0);
 		
@@ -245,6 +249,7 @@ void set_workout_day_type(bool day_type){
 
 /* Get weight for various exercises; always in pounds */
 int get_squat_weight(){
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Returning squat weight...");
 	return persist_read_int(SQUAT_WEIGHT_KEY);
 }
 int get_bench_weight(){
@@ -414,26 +419,40 @@ void migrate_old_workouts(){
 	// NOTE: Implement this if needed
 }
 
-/* Deletes all persistant data with this application */
-void nuke_all_old_workouts(){
-	// Delete all of the keys
-	persist_delete(STORAGE_VERSION_KEY);
-	persist_delete(WORKOUT_TYPE_KEY);
-	persist_delete(SQUAT_WEIGHT_KEY);
-	persist_delete(BENCH_WEIGHT_KEY);
-	persist_delete(BENT_WEIGHT_KEY);
-	persist_delete(OVERHEAD_WEIGHT_KEY);
-	persist_delete(DEADLIFT_WEIGHT_KEY);
+/* Deletes all the old workouts, NOT any of the weights */
+void nuke_all_old_workouts(){	
+	// I don't know why on earth we need to do this, but for some reason we do
+	bool workout_day_type = get_workout_day_type();
+	int squat_weight = get_squat_weight();
+	int bench_weight = get_bench_weight();
+	int bent_weight = get_bent_rows_weight();
+	int overhead_weight = get_overhead_weight();
+	int deadlift_weight = get_deadlifts_weight();
 	
 	// Delete all of the old workouts
 	for(int i = 0; i < persist_read_int(WORKOUT_LOG_COUNT_KEY); i++){
-		persist_delete(i);
-		persist_delete(i + 1);
-		persist_delete(i + 1);
+		persist_delete(persist_read_int(WORKOUT_LOG_COUNT_KEY) + i);
+		persist_delete(persist_read_int(WORKOUT_LOG_COUNT_KEY) + i + 1);
+		persist_delete(persist_read_int(WORKOUT_LOG_COUNT_KEY) + i + 2);
 	}
 	
-	// Delete the count of all of the old workouts
-	persist_delete(WORKOUT_LOG_COUNT_KEY);
+	// Ensure that the workout log count is equal to zero
+	persist_write_int(WORKOUT_LOG_COUNT_KEY, 0);
+	
+	// Make sure we preserve the day type
+	set_workout_day_type(workout_day_type);
+	set_squat_weight(squat_weight);
+	set_bench_weight(bench_weight);
+	set_bent_rows_weight(bent_weight);
+	set_overhead_weight(overhead_weight);
+	set_deadlifts_weight(deadlift_weight);
+	
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Current day: %i", get_workout_day_type());
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Squat weight: %i", get_squat_weight());
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Bench weight: %i", get_bench_weight());
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Bent weight: %i", get_bent_rows_weight());
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Overhead weight: %i", get_overhead_weight());
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Deadlift weight: %i", get_deadlifts_weight());
 }
 
 /* Converts an integer to a three letter code representing the month */

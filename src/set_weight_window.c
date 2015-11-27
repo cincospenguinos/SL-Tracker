@@ -67,6 +67,8 @@ void set_weight_window_down_single_click_handler(ClickRecognizerRef recognizer, 
 
 /* Helper function to manage getting the proper weight */
 void get_weight_of(int exercise_type){
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Getting weight of %i...", exercise_type);
+	
 	switch(exercise_type){
 		case 1:
 			weight = get_squat_weight();
@@ -84,6 +86,8 @@ void get_weight_of(int exercise_type){
 			weight = get_deadlifts_weight();
 			break;
 	}
+	
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Retrieved.");
 }
 
 /* Helper function to help set the text */

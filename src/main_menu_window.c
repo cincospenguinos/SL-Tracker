@@ -44,8 +44,10 @@ void main_menu_window_load(Window *window){
 void main_menu_window_unload(Window *window){
 	menu_layer_destroy(main_menu_layer);
 	
-	if(workout_window != NULL)
-		window_destroy(workout_window);
+// 	if(workout_window != NULL)
+// 		window_destroy(workout_window);
+	
+// 	APP_LOG(APP_LOG_LEVEL_DEBUG, "Is the workout window null: %i", workout_window == NULL);
 }
 
 uint16_t main_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
@@ -57,12 +59,10 @@ uint16_t main_menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section
 }
 
 int16_t main_menu_get_header_height_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-	return MENU_CELL_BASIC_HEADER_HEIGHT;
+	return 0; // We won't have a header
 }
 
-void main_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data){
-	menu_cell_basic_header_draw(ctx, cell_layer, "SL TRACKER");
-}
+void main_menu_draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t section_index, void *data){}
 
 void main_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){
 	switch(cell_index->row){
@@ -98,6 +98,7 @@ void main_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, voi
 			view_workout_log();
 			break;
 		case 3:
+			 // TODO: This doesn't get called. Why?
 			delete_workout_log();
 	}
 }
@@ -126,4 +127,6 @@ void view_workout_log(){
 /* Called when the user requests to nuke the whales */
 void delete_workout_log(){
 	nuke_all_old_workouts();
+	
+	menu_layer_reload_data(main_menu_layer);
 }

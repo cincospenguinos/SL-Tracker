@@ -33,13 +33,13 @@ void old_entry_window_load(Window *window){
 	
 	for(int i = 0; i < 3; i++){
 		// Create the exercise text layer
-		exercises[i] = text_layer_create(GRect(0, 30 + i * 40, 108, 20));
+		exercises[i] = text_layer_create(GRect(0, 30 + i * 40, 106, 20));
 		text_layer_set_font(exercises[i], fonts_get_system_font(FONT_KEY_GOTHIC_18));
 		text_layer_set_text_alignment(exercises[i], GTextAlignmentLeft);
 		layer_add_child(window_get_root_layer(window), text_layer_get_layer(exercises[i]));
 		
 		// the weights text layer
-		weights[i] = text_layer_create(GRect(108, 30 + i * 40, 36, 20));
+		weights[i] = text_layer_create(GRect(106, 30 + i * 40, 36, 20));
 		text_layer_set_font(weights[i], fonts_get_system_font(FONT_KEY_GOTHIC_18));
 		text_layer_set_text_alignment(weights[i], GTextAlignmentRight);
 		layer_add_child(window_get_root_layer(window), text_layer_get_layer(weights[i]));
