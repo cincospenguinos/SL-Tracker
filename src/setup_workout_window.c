@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "setup_workout_window.h"
+#include "set_weight_window.h"
 
 /* The init function */
 void setup_workout_window_init(){
@@ -36,6 +37,9 @@ void setup_workout_window_load(Window *window){
 
 void setup_workout_window_unload(Window *window){
 	menu_layer_destroy(setup_workout_menu);
+	
+	if(set_weight_window != NULL)
+		window_destroy(set_weight_window);
 }
 
 /*
@@ -83,12 +87,22 @@ void setup_workout_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer
 
 void setup_workout_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
 	switch(cell_index->row){
-		case 0:
+		case 0: // A or B day
+			break;
 		case 1:
+			set_weight_window_init(1);
+			break;
 		case 2:
+			set_weight_window_init(2);
+			break;
 		case 3:
+			set_weight_window_init(3);
+			break;
 		case 4:
+			set_weight_window_init(4);
+			break;
 		case 5:
+			set_weight_window_init(5);
 			break;
 		default:
 			break;

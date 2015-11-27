@@ -87,7 +87,6 @@ void main_menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuInd
 }
 
 void main_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, void *data){
-	APP_LOG(APP_LOG_LEVEL_INFO, "Select called; %i", cell_index->row);
 	switch(cell_index->row){
 		case 0:
 			create_new_workout();

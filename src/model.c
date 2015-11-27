@@ -68,8 +68,6 @@ void store_new_workout(Workout workout) {
 	persist_write_int(write_index, workout_intA);
 	persist_write_int(write_index + 1, workout_intB);
 	persist_write_int(write_index + 2, workout_intC);
-
-	int some_index = persist_read_int(WORKOUT_LOG_COUNT_KEY);	
 	
 	// Add one to the count
 	persist_write_int(WORKOUT_LOG_COUNT_KEY, persist_read_int(WORKOUT_LOG_COUNT_KEY) + 1);
