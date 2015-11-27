@@ -41,11 +41,6 @@ void log_menu_window_load(Window *window){
 
 void log_menu_window_unload(Window *window){
 	menu_layer_destroy(log_menu_layer);
-	
-// 	APP_LOG(APP_LOG_LEVEL_DEBUG, "Is the old_entry_window null: %i", old_entry_window == NULL);
-	
-// 	if(old_entry_window != NULL)
-// 		window_destroy(old_entry_window);
 }
 
 /*

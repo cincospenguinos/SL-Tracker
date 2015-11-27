@@ -43,11 +43,6 @@ void main_menu_window_load(Window *window){
 /* Called when the main_menu_window unloads */
 void main_menu_window_unload(Window *window){
 	menu_layer_destroy(main_menu_layer);
-	
-// 	if(workout_window != NULL)
-// 		window_destroy(workout_window);
-	
-// 	APP_LOG(APP_LOG_LEVEL_DEBUG, "Is the workout window null: %i", workout_window == NULL);
 }
 
 uint16_t main_menu_get_num_sections_callback(MenuLayer *menu_layer, void *data){
