@@ -121,12 +121,9 @@ void setup_next_workout(){
 void view_workout_log(){
 	if(get_workout_count() != 0)
 		log_menu_init();
-	else {
-		// TODO: Indicate that there are no workouts?
-	}
 }
 
 /* Called when the user requests to nuke the whales */
 void delete_workout_log(){
-	// TODO: This
+	nuke_all_old_workouts();
 }

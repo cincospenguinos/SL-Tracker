@@ -45,10 +45,10 @@ void old_entry_window_load(Window *window){
 		layer_add_child(window_get_root_layer(window), text_layer_get_layer(weights[i]));
 		
 		// the sets text layer
-		sets[i] = text_layer_create(GRect(0, 50 + i * 40, 144, 20));
-		text_layer_set_font(sets[i], fonts_get_system_font(FONT_KEY_GOTHIC_18));
-		text_layer_set_text_alignment(sets[i], GTextAlignmentCenter);
-		layer_add_child(window_get_root_layer(window), text_layer_get_layer(sets[i]));
+		old_sets[i] = text_layer_create(GRect(0, 50 + i * 40, 144, 20));
+		text_layer_set_font(old_sets[i], fonts_get_system_font(FONT_KEY_GOTHIC_18));
+		text_layer_set_text_alignment(old_sets[i], GTextAlignmentCenter);
+		layer_add_child(window_get_root_layer(window), text_layer_get_layer(old_sets[i]));
 	}
 	
 	// Go ahead and grab the workout info from persistent storage
@@ -69,7 +69,7 @@ void old_entry_window_unload(Window *window){
 	// Destroy all the other text layers
 	for(int i = 0; i < 3; i++){
 		text_layer_destroy(exercises[i]);
-		text_layer_destroy(sets[i]);
+		text_layer_destroy(old_sets[i]);
 		text_layer_destroy(weights[i]);
 	}
 }
@@ -186,7 +186,7 @@ void update_text_layers(Workout workout){
 	for(int i = 0; i < 3; i++){
 		text_layer_set_text(exercises[i], exercise_text[i]);
 		text_layer_set_text(weights[i], weights_text[i]);
-		text_layer_set_text(sets[i], sets_text[i]);
+		text_layer_set_text(old_sets[i], sets_text[i]);
 	}
 }
 

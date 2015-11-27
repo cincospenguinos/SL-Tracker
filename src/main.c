@@ -6,6 +6,11 @@
 #include <pebble.h>
 #include "main_menu_window.h"
 #include "model.h"
+#include "log_menu_window.h"
+#include "old_entry_window.h"
+#include "setup_workout_window.h"
+#include "set_weight_window.h"
+#include "workout_window.h"
 
 void init(){
 	init_model();
@@ -14,8 +19,6 @@ void init(){
 
 void deinit() {
 	window_destroy(main_menu_window);
-	
-	nuke_all_old_workouts(); // TODO: Remove this
 }
 	
 int main(void) {

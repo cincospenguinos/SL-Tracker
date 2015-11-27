@@ -9,11 +9,9 @@ void workout_window_init(){
 	exercise1_weight = get_squat_weight();
 	
 	if(!day_type){
-		APP_LOG(APP_LOG_LEVEL_DEBUG, "Beginning workout A");
 		exercise2_weight = get_bench_weight();
 		exercise3_weight = get_bent_rows_weight();
 	} else {
-		APP_LOG(APP_LOG_LEVEL_DEBUG, "Beginning workout B");
 		exercise2_weight = get_overhead_weight();
 		exercise3_weight = get_deadlifts_weight();
 	}

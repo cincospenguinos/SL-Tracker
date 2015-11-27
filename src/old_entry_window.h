@@ -14,7 +14,7 @@ TextLayer *date_text; // The date that the workout was performed
 
 TextLayer *exercises[3]; // The collection of all the text layers to show old exercises
 TextLayer *weights[3]; // The collection of weight for each exercise
-TextLayer *sets[3]; // The collection of reps per set for each exercise
+TextLayer *old_sets[3]; // The collection of reps per set for each exercise
 
 int current_index; // The current index that we are governing now
 

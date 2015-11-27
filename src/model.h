@@ -76,7 +76,10 @@ WorkoutPeek peek_workout(int index);
 int get_workout_count();
 
 /* Returns boolean indicating an A day or B day */
-bool get_workout_day_type();
+bool get_workout_day_type(); // false = A; true = B;
+
+/* Set the workout day type */
+void set_workout_day_type(bool day_type);
 
 /* Get weight for various exercises; always in pounds */
 int get_squat_weight();

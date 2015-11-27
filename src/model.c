@@ -239,6 +239,10 @@ bool get_workout_day_type(){
 	return persist_read_bool(WORKOUT_TYPE_KEY);
 }
 
+void set_workout_day_type(bool day_type){
+	persist_write_bool(WORKOUT_TYPE_KEY, day_type);
+}
+
 /* Get weight for various exercises; always in pounds */
 int get_squat_weight(){
 	return persist_read_int(SQUAT_WEIGHT_KEY);
