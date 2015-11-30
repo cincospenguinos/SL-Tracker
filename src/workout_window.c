@@ -80,7 +80,7 @@ void workout_window_load(Window *window){
 	}
 	
 	// selected set layer to show what is the current working set
-	selected_set_layer = inverter_layer_create(GRect(11, 80, 17, 20));
+	selected_set_layer = inverter_layer_create(GRect(10, 80, 16, 20));
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(selected_set_layer));
 	
 	// motivation text layer
@@ -284,16 +284,16 @@ void update_working_set_inverter_layer(){
 	// Now we need to figure out where we need to place the layer again
 	switch(current_working_set){
 		case 0:
-			selected_set_layer = inverter_layer_create(GRect(12, 80, 16, 20));
+			selected_set_layer = inverter_layer_create(GRect(10, 80, 16, 20));
 			break;
 		case 1:
-			selected_set_layer = inverter_layer_create(GRect(40, 80, 16, 20));
+			selected_set_layer = inverter_layer_create(GRect(38, 80, 16, 20));
 			break;
 		case 2:
-			selected_set_layer = inverter_layer_create(GRect(68, 80, 16, 20));
+			selected_set_layer = inverter_layer_create(GRect(66, 80, 16, 20));
 			break;
 		case 3:
-			selected_set_layer = inverter_layer_create(GRect(96, 80, 16, 20));
+			selected_set_layer = inverter_layer_create(GRect(94, 80, 16, 20));
 			break;
 		default:
 			selected_set_layer = inverter_layer_create(GRect(122, 80, 16, 20));

@@ -29,11 +29,7 @@
 /* Sets up the persistent data. */
 void init_model() {
 	// If we don't have any existing persistent data, then we need to set it up
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Should we reinitialize the model? %i", !persist_exists(WORKOUT_LOG_COUNT_KEY));
-	
-	if(!persist_exists(WORKOUT_LOG_COUNT_KEY)) {
-		APP_LOG(APP_LOG_LEVEL_DEBUG, "Initiating the model");
-		
+	if(!persist_exists(WORKOUT_LOG_COUNT_KEY)) {		
 		// We have no logged workouts
 		persist_write_int(WORKOUT_LOG_COUNT_KEY, 0);
 		
@@ -161,15 +157,11 @@ void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, in
 Workout get_workout(int index, int *sets1, int *sets2, int *sets3) {
 	Workout result;
 	int model_index = WORKOUT_LOG_START_KEY + index * 3;
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Index to get workout from model: %i", model_index);
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Index passed in: %i", index);
 	
 	if(persist_exists(model_index)){
 		int storedA = persist_read_int(model_index);
 		int storedB = persist_read_int(model_index + 1);
 		int storedC = persist_read_int(model_index + 2);
-		
-		APP_LOG(APP_LOG_LEVEL_INFO, "Reading from index: %i", index);
 		
 		result = convert_int_to_workout(storedA, storedB, storedC, sets1, sets2, sets3);
 	} else {
@@ -249,7 +241,6 @@ void set_workout_day_type(bool day_type){
 
 /* Get weight for various exercises; always in pounds */
 int get_squat_weight(){
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Returning squat weight...");
 	return persist_read_int(SQUAT_WEIGHT_KEY);
 }
 int get_bench_weight(){
@@ -446,13 +437,6 @@ void nuke_all_old_workouts(){
 	set_bent_rows_weight(bent_weight);
 	set_overhead_weight(overhead_weight);
 	set_deadlifts_weight(deadlift_weight);
-	
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Current day: %i", get_workout_day_type());
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Squat weight: %i", get_squat_weight());
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Bench weight: %i", get_bench_weight());
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Bent weight: %i", get_bent_rows_weight());
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Overhead weight: %i", get_overhead_weight());
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Deadlift weight: %i", get_deadlifts_weight());
 }
 
 /* Converts an integer to a three letter code representing the month */

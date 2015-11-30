@@ -1,8 +1,18 @@
 /**
 * main.c
 *
-* The entry point for the app
+* The entry point for the app.
+*
+* Here's a list of things to do to better improve the app:
+*
+* - 
+* - Get permission to post it onto the store
+* - Translate it into french
+* - Let the user set the weight to be in pounds or kilos
+* - Migrate the app to pebble time users
+* - Migrate the app to pebble round users
 */
+
 #include <pebble.h>
 #include "main_menu_window.h"
 #include "model.h"
