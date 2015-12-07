@@ -5,8 +5,18 @@
 
 /* log_menu_init() function */
 void log_menu_init(){
-	if(log_menu_window == NULL)
+	
+	if(log_menu_window == NULL){
 		log_menu_window = window_create();
+	}
+
+	// Let's get all of the workout peeks and store them in our array
+	workout_count = get_workout_count();
+	workouts = (WorkoutPeek*)malloc(workout_count * sizeof(peek_workout(0)));
+	
+	for(int i = 0; i < workout_count; i++){
+		workouts[i] = peek_workout(i);
+	}
 	
 	window_set_window_handlers(log_menu_window, (WindowHandlers){
 		.load = log_menu_window_load,
@@ -41,6 +51,7 @@ void log_menu_window_load(Window *window){
 
 void log_menu_window_unload(Window *window){
 	menu_layer_destroy(log_menu_layer);
+	free(workouts);
 }
 
 /*
@@ -54,7 +65,7 @@ uint16_t get_num_sections_callback(MenuLayer *layer, void *data){
 
 /* Returns the number of rows (or old workouts) */
 uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data){
-	return get_workout_count();
+	return workout_count;
 }
 
 /* Returns the header height */
@@ -70,7 +81,7 @@ void draw_header_callback(GContext* ctx, const Layer *cell_layer, uint16_t secti
 /* Draws the row at the index given */
 void draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuIndex *cell_index, void *data){	
 	// Get the workout peek structure from wherever the index is
-	WorkoutPeek peek = peek_workout(cell_index->row);
+	WorkoutPeek peek = workouts[cell_index->row];
 	
 	// Throw it into a buffer to write out the title and subtitle
 	char title_buffer[] = "DD MMM YYYY - T";

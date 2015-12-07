@@ -5,10 +5,14 @@
  */
 #pragma once
 #include <pebble.h>
+#include "model.h"
 
 Window *log_menu_window; // The window that houses it all
 
 MenuLayer *log_menu_layer; // The layer that houses it all
+
+WorkoutPeek *workouts; // The collection of workouts that we need to worry about to avoid slowness when redrawing
+int workout_count; // The total number of workouts
 
 /* log_menu_init() function */
 void log_menu_init();
