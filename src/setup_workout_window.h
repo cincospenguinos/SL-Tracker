@@ -7,9 +7,7 @@
 #pragma once
 #include <pebble.h>
 
-Window *setup_workout_window; // The window we are going to use
-
-MenuLayer *setup_workout_menu; // The menu that will be used to show everything to the user
+extern Window *setup_workout_window; // The window we are going to use
 
 /* The init function */
 void setup_workout_window_init();

@@ -2,6 +2,13 @@
 #include "set_weight_window.h"
 #include "model.h"
 
+Window *set_weight_window; // The window holding it all together
+
+static TextLayer *exercise_text; // The text for what exercise we're doing
+static TextLayer *weight_text; // The weight that we are changing
+
+static int weight; // The weight that we will reset
+static int exercise; // The exercise that we are switching over to
 
 /* The initializer */
 void set_weight_window_init(int exercise_type){

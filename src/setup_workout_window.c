@@ -3,6 +3,9 @@
 #include "set_weight_window.h"
 #include "set_day_type_window.h"
 
+Window *setup_workout_window;
+MenuLayer *setup_workout_menu; // The menu that will be used to show everything to the user
+
 /* The init function */
 void setup_workout_window_init(){
 	setup_workout_window = window_create();

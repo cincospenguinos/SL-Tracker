@@ -2,6 +2,13 @@
 #include "set_day_type_window.h"
 #include "model.h"
 
+Window *set_day_type_window;
+
+static TextLayer *info_text; // Indicates stuff to the user
+static TextLayer *day_type_text; // Indicates whether it's an A day or B day
+
+static bool is_b_day; // false = a; true = b;
+
 /* The init function */
 void set_day_type_window_init(){
 	is_b_day = get_workout_day_type();

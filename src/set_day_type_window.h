@@ -1,12 +1,7 @@
 #pragma once
 #include <pebble.h>
 
-Window *set_day_type_window;
-
-TextLayer *info_text; // Indicates stuff to the user
-TextLayer *day_type_text; // Indicates whether it's an A day or B day
-
-bool is_b_day; // false = a; true = b;
+extern Window *set_day_type_window;
 
 /* The init function */
 void set_day_type_window_init();

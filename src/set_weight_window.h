@@ -3,13 +3,7 @@
 
 // TODO: What do for indicating to the user what the weight is
 
-Window *set_weight_window; // The window holding it all together
-
-TextLayer *exercise_text; // The text for what exercise we're doing
-TextLayer *weight_text; // The weight that we are changing
-
-int weight; // The weight that we will reset
-int exercise; // The exercise that we are switching over to
+extern Window *set_weight_window; // The window holding it all together
 
 /*
  * NOTE: Here is how the exercises will work

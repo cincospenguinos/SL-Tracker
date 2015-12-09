@@ -2,6 +2,8 @@
 #include "model.h"
 #include "workout_window.h"
 
+Window *workout_window; // the main workout window
+
 /* Variables for the view */
 static TextLayer *current_exercise; // the workout that is currently being done
 static TextLayer *weight_text; // the amount of weight for the current exercise

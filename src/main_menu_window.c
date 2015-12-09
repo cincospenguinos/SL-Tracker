@@ -5,6 +5,7 @@
 #include "log_menu_window.h"
 #include "setup_workout_window.h"
 
+Window *main_menu_window; // The window itself
 static MenuLayer *main_menu_layer; // The menu layer
 
 /* Init function */
