@@ -11,8 +11,7 @@
  * Instance variables
  */
 
-Window *main_menu_window; // The window itself
-MenuLayer *main_menu_layer; // The menu layer
+extern Window *main_menu_window; // The window itself
 
 /* Init function */
 void main_menu_window_init();

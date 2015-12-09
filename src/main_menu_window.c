@@ -5,6 +5,8 @@
 #include "log_menu_window.h"
 #include "setup_workout_window.h"
 
+static MenuLayer *main_menu_layer; // The menu layer
+
 /* Init function */
 void main_menu_window_init(){	
 	main_menu_window = window_create();
@@ -93,7 +95,6 @@ void main_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, voi
 			view_workout_log();
 			break;
 		case 3:
-			 // TODO: This doesn't get called. Why?
 			delete_workout_log();
 	}
 }
@@ -105,18 +106,18 @@ void main_menu_select_callback(MenuLayer *menu_layer, MenuIndex *cell_index, voi
 
 /* Called when a new workout is requested */
 void create_new_workout(){
-	workout_window_init();
+// 	workout_window_init();
 }
 
 /* Called when the user wants to setup the workout */
 void setup_next_workout(){
-	setup_workout_window_init();
+// 	setup_workout_window_init();
 }
 
 /* Called when the user wants to check the old workouts he/she has */
 void view_workout_log(){
-	if(get_workout_count() != 0)
-		log_menu_init();
+// 	if(get_workout_count() != 0)
+// 		log_menu_init();
 }
 
 /* Called when the user requests to nuke the whales */

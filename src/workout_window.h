@@ -7,36 +7,7 @@
 #include <pebble.h>
 	
 /* Instance variables */
-Window *workout_window; // the main workout window
-
-TextLayer *current_exercise; // the workout that is currently being done
-TextLayer *weight_text; // the amount of weight for the current exercise
-TextLayer *timer; // the timer managing the various sets and reps
-TextLayer *sets[5]; // the collection of sets that are currently being managed
-InverterLayer *selected_set_layer; // the collection of layers that indicate what is the currently selected set
-TextLayer *motivation; // a text layer to provide motivation to the user
-
-/* Variables to manage the view */
-bool timer_running; // dictates whether or not the timer is running
-bool day_type; // false for A day, true for B day
-
-int timer_count; // the current number of seconds on the timer
-int current_rep_count; // the current number of reps the user has listed
-int current_working_set; // the current set that the user is working on
-int current_exercise_index; // manages the current exercise
-
-char buffers[5][2]; // An array of buffers to manage the sets text layers
-char weight_buffer[8]; // Buffer to hold the weight of the various exercises
-int reps_per_exercise[3][5]; // An array of integers to manage the number of reps for each set in each exercise
-
-int exercise1_weight; // The weight for the first exercise
-int exercise2_weight; // The weight for the second exercise
-int exercise3_weight; // The weight for the third exercise
-
-bool finished_workout; // Indicates whether we need to save the workout or not
-
-bool on_deadlifts; // True if the user is currently working on deadlifts
-bool failed_set; // True if the user failed a set
+extern Window *workout_window; // the main workout window
 
 /* Initializes and pushes this window */
 void workout_window_init();
