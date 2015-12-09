@@ -1,7 +1,7 @@
 {
     "appKeys": {},
     "capabilities": [
-        ""
+        "configurable"
     ],
     "companyName": "andre.lafleur@utah.edu",
     "longName": "SL 5x5 Tracker",

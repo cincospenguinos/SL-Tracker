@@ -19,8 +19,13 @@
 #define BENT_WEIGHT_KEY 4 // Integer containing the current weight of the next bent rows
 #define OVERHEAD_WEIGHT_KEY 5 // Integer containing the current weight of the next overhead press
 #define DEADLIFT_WEIGHT_KEY 6 // Integer containing the current weight of the next deadlift
-#define WORKOUT_LOG_COUNT_KEY 7 // The total number of old workouts is located here
-#define WORKOUT_LOG_START_KEY 8 // Where the workout log starts
+#define SQUAT_DELOAD_KEY 7 // Integer indicating whether or not we failed the last set
+#define BENCH_DELOAD_KEY 8 // Integer indicating whether or not we failed the last set
+#define BENT_DELOAD_KEY 9 // Integer indicating whether or not we failed the last set
+#define OVERHEAD_DELOAD_KEY 10 // Integer indicating whether or not we failed the last set
+#define DEADLIFTS_DELOAD_KEY 11 // Integer indicating whether or not we failed the last set
+#define WORKOUT_LOG_COUNT_KEY 12 // The total number of old workouts is located here
+#define WORKOUT_LOG_START_KEY 13 // Where the workout log starts
 
 /*
  * Model Management Functions - acts as a controller
@@ -29,7 +34,7 @@
 /* Sets up the persistent data. */
 void init_model() {
 	// If we don't have any existing persistent data, then we need to set it up
-	if(!persist_exists(WORKOUT_LOG_COUNT_KEY)) {		
+// 	if(!persist_exists(WORKOUT_LOG_COUNT_KEY)) {		
 		// We have no logged workouts
 		persist_write_int(WORKOUT_LOG_COUNT_KEY, 0);
 		
@@ -42,10 +47,17 @@ void init_model() {
 		persist_write_int(BENT_WEIGHT_KEY, 45);
 		persist_write_int(OVERHEAD_WEIGHT_KEY, 45);
 		persist_write_int(DEADLIFT_WEIGHT_KEY, 45);
+	
+		// Setup all the deload stuff
+		persist_write_int(SQUAT_DELOAD_KEY, 0);
+		persist_write_int(BENCH_DELOAD_KEY, 0);	
+		persist_write_int(BENT_DELOAD_KEY, 0);
+		persist_write_int(OVERHEAD_DELOAD_KEY, 0);
+		persist_write_int(DEADLIFTS_DELOAD_KEY, 0);
 		
 		// Write the current storage version into persistent storage as well
 		persist_write_int(STORAGE_VERSION_KEY, CURRENT_STORAGE_VERSION);
-	}
+// 	}
 }
 
 /* Toggles the boolean A/B day type */
@@ -76,36 +88,167 @@ void store_new_workout(Workout workout) {
 	toggle_next_workout();
 	
 	// Manage the weight changes
-	int sum1 = 0;
-	int sum2 = 0;
-	int sum3 = 0;
-	
-	for(int i = 0; i < 5; i++){
-		sum1 += workout.exercise1.reps[i];
-		sum2 += workout.exercise2.reps[i];
-		sum3 += workout.exercise3.reps[i];
-	}
-	
-	if(sum1 == 25){
-		persist_write_int(SQUAT_WEIGHT_KEY, persist_read_int(SQUAT_WEIGHT_KEY) + 5);
-	}
-	
 	// A day
 	if(!workout.day_type){
-		if(sum2 == 25)
-			persist_write_int(BENCH_WEIGHT_KEY, persist_read_int(BENCH_WEIGHT_KEY) + 5);
-		
-		if(sum3 == 25)
-			persist_write_int(BENT_WEIGHT_KEY, persist_read_int(BENT_WEIGHT_KEY) + 5);
+		manage_weights_a(workout);
 	} 
 	
 	// B day
 	else {
-		if(sum2 == 25)
-			persist_write_int(OVERHEAD_WEIGHT_KEY, persist_read_int(OVERHEAD_WEIGHT_KEY) + 5);
+		manage_weights_b(workout);
+	}
+}
+
+/* Helper function that manages the weights for an A day */
+void manage_weights_a(Workout workout){
+	// Get the sums of all the reps
+	int squats = 0;
+	int bench = 0;
+	int bent = 0;
+	
+	for(int i = 0; i < 5; i++){
+		squats += workout.exercise1.reps[i];
+		bench += workout.exercise2.reps[i];
+		bent += workout.exercise3.reps[i];
+	}
+	
+	// Check to see if we add weight
+	if(squats == 25){
+		persist_write_int(SQUAT_WEIGHT_KEY, workout.exercise1.weight + 5);
+		persist_write_int(SQUAT_DELOAD_KEY, 0);
+	} 
+	else
+		persist_write_int(SQUAT_DELOAD_KEY, persist_read_int(SQUAT_DELOAD_KEY) + 1);
+	
+	if(bench == 25){
+		persist_write_int(BENCH_WEIGHT_KEY, workout.exercise2.weight + 5);
+		persist_write_int(BENCH_DELOAD_KEY, 0);
+	}
+	else
+		persist_write_int(BENCH_DELOAD_KEY, persist_read_int(BENCH_DELOAD_KEY) + 1);
+	
+	if(bent == 25){
+		persist_write_int(BENT_WEIGHT_KEY, workout.exercise3.weight + 5);
+		persist_write_int(BENT_DELOAD_KEY, 0);
+	}
+	else
+		persist_write_int(BENT_DELOAD_KEY, persist_read_int(BENT_DELOAD_KEY) + 1);
+	
+	// Check squat deload
+	if(persist_read_int(SQUAT_DELOAD_KEY) == 3){
+		squats = workout.exercise1.weight * 9 / 10;
 		
-		if(sum3 == 25)
-			persist_write_int(DEADLIFT_WEIGHT_KEY, persist_read_int(DEADLIFT_WEIGHT_KEY) + 5);
+		while(squats % 5 != 0)
+			squats--;
+		
+		if(squats < 45)
+			squats = 45;
+		
+		persist_write_int(SQUAT_WEIGHT_KEY, squats);
+		persist_write_int(SQUAT_DELOAD_KEY, 0);
+	}
+	
+	// Check bench deload
+	if(persist_read_int(BENCH_DELOAD_KEY) == 3){
+		bench = workout.exercise1.weight * 9 / 10;
+		
+		while(bench % 5 != 0)
+			bench--;
+		
+		if(bench < 45)
+			bench = 45;
+		
+		persist_write_int(BENCH_WEIGHT_KEY, bench);
+		persist_write_int(BENCH_DELOAD_KEY, 0);
+	}
+	
+	// Check bent deload
+	if(persist_read_int(BENT_DELOAD_KEY) == 3){
+		bent = workout.exercise1.weight * 9 / 10;
+		
+		while(bent % 5 != 0)
+			bent--;
+		
+		if(bent < 45)
+			bent = 45;
+		
+		persist_write_int(BENT_WEIGHT_KEY, bent);
+		persist_write_int(BENT_DELOAD_KEY, 0);
+	}
+}
+
+void manage_weights_b(Workout workout){
+	// Get the sums of all the reps
+	int squats = 0;
+	int overhead = 0;
+	
+	for(int i = 0; i < 5; i++){
+		squats += workout.exercise1.reps[i];
+		overhead += workout.exercise2.reps[i];
+	}
+	
+	// Check to see if we add weight
+	if(squats == 25){
+		persist_write_int(SQUAT_WEIGHT_KEY, workout.exercise1.weight + 5);
+		persist_write_int(SQUAT_DELOAD_KEY, 0);
+	}
+	else
+		persist_write_int(SQUAT_DELOAD_KEY, persist_read_int(SQUAT_DELOAD_KEY) + 1);
+	
+	if(overhead == 25) {
+		persist_write_int(OVERHEAD_WEIGHT_KEY, workout.exercise2.weight + 5);
+		persist_write_int(OVERHEAD_DELOAD_KEY, 0);
+	}
+	else
+		persist_write_int(OVERHEAD_DELOAD_KEY, persist_read_int(OVERHEAD_DELOAD_KEY) + 1);
+	
+	if(workout.exercise3.reps[2] == 5){
+		persist_write_int(DEADLIFT_WEIGHT_KEY, workout.exercise3.weight + 10);
+		persist_write_int(DEADLIFTS_DELOAD_KEY, 0);
+	}
+	else
+		persist_write_int(DEADLIFTS_DELOAD_KEY, persist_read_int(DEADLIFTS_DELOAD_KEY) + 1);
+	
+	// Check squat deload
+	if(persist_read_int(SQUAT_DELOAD_KEY) == 3){
+		squats = workout.exercise1.weight * 9 / 10;
+		
+		while(squats % 5 != 0)
+			squats--;
+		
+		if(squats < 45)
+			squats = 45;
+		
+		persist_write_int(SQUAT_WEIGHT_KEY, squats);
+		persist_write_int(SQUAT_DELOAD_KEY, 0);
+	}
+	
+	// Check overhead press deload
+	if(persist_read_int(OVERHEAD_DELOAD_KEY) == 3){
+		overhead = workout.exercise1.weight * 9 / 10;
+		
+		while(overhead % 5 != 0)
+			overhead--;
+		
+		if(overhead < 45)
+			overhead = 45;
+		
+		persist_write_int(OVERHEAD_WEIGHT_KEY, overhead);
+		persist_write_int(OVERHEAD_DELOAD_KEY, 0);
+	}
+	
+	// Check deadlift deload
+	if(persist_read_int(DEADLIFTS_DELOAD_KEY) == 3){
+		int deadlift = workout.exercise1.weight * 9 / 10;
+		
+		while(deadlift % 10 != 5)
+			deadlift--;
+		
+		if(deadlift < 45)
+			deadlift = 45;
+		
+		persist_write_int(DEADLIFT_WEIGHT_KEY, deadlift);
+		persist_write_int(DEADLIFTS_DELOAD_KEY, 0);
 	}
 }
 
