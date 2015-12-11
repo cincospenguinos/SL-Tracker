@@ -20,7 +20,7 @@
 /* Exercise struct definition */
 typedef struct {
 	char *name; // Name of the exercise
-	int *reps; // Pointer to an array of the sets containing the reps of each
+	int reps[5]; // Array of sets and their reps
 	int weight; // The weight of the exercise - always in pounds
 }Exercise;
 
@@ -67,7 +67,7 @@ void manage_weights_a(Workout workout);
 void manage_weights_b(Workout workout);
 
 /* Stores into persistent memory a workout using the data passed */
-void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, int weight1, int weight2, int weight3);
+// void store_new_workout_raw(bool day_type, int *sets1, int *sets2, int *sets3, int weight1, int weight2, int weight3);
 
 /* Pulls the workout out from the index passed */
 Workout get_workout(int index, int *sets1, int *sets2, int *sets3);

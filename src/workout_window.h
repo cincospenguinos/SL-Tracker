@@ -5,12 +5,6 @@
 */
 #pragma once
 #include <pebble.h>
-
-typedef struct {
-	bool day_type;
-	int exercises[3][5][5];
-	int weights[3];
-}WorkoutWindowWorkout;
 	
 /* Instance variables */
 extern Window *workout_window; // the main workout window
