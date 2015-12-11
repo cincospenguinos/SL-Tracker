@@ -5,6 +5,12 @@
 */
 #pragma once
 #include <pebble.h>
+
+typedef struct {
+	bool day_type;
+	int exercises[3][5][5];
+	int weights[3];
+}WorkoutWindowWorkout;
 	
 /* Instance variables */
 extern Window *workout_window; // the main workout window
@@ -22,7 +28,6 @@ void workout_window_single_up_click(ClickRecognizerRef recognizer, void *context
 void workout_window_single_down_click(ClickRecognizerRef recognizer, void *context);
 void workout_window_single_select_click(ClickRecognizerRef recognizer, void *context);
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context);
-void workout_window_long_back_click(ClickRecognizerRef recognizer, void *context);
 
 /* Layer management functions */
 void update_rep_text();

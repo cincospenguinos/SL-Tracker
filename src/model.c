@@ -177,6 +177,7 @@ void manage_weights_a(Workout workout){
 	}
 }
 
+/* Helper function that manages the weights for a B day */
 void manage_weights_b(Workout workout){
 	// Get the sums of all the reps
 	int squats = 0;
