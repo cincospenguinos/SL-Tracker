@@ -144,7 +144,7 @@ void update_text_layers(Workout workout){
 	static char date_buffer[] = "DD MMM YYYY";
 	
 	// snprinf'em
-	snprintf(date_buffer, sizeof(date_buffer), "%i %s %i", workout.day, int_to_month(workout.month), workout.year);
+	snprintf(date_buffer, sizeof(date_buffer), "%i %s %i", workout.day, int_to_month(workout.month), workout.year + 2000);
 	
 	snprintf(exercise_text[0], sizeof(exercise_text[0]), "%s", workout.exercise1.name);
 	snprintf(exercise_text[1], sizeof(exercise_text[1]), "%s", workout.exercise2.name);

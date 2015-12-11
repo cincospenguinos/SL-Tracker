@@ -33,7 +33,6 @@ Exercise get_current_exercise();
 
 /* Initializes and pushes this window */
 void workout_window_init(){
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "Default values: %i", current_workout.exercise1.reps[0]);
 	
 	// Get the current workout information put together
 	current_workout.day_type = get_workout_day_type();
@@ -56,12 +55,20 @@ void workout_window_init(){
 		current_workout.exercise2.weight = get_bent_rows_weight();
 	}
 	
-	// Set all of the values in each exercise to 0 to avoid any memory weirdness
+	// Set all of the values in each exercise to 5 to avoid any memory weirdness
 	for(int i = 0; i < 5; i++){
 		current_workout.exercise1.reps[i] = 5;
 		current_workout.exercise2.reps[i] = 5;
 		current_workout.exercise3.reps[i] = 5;
 	}
+	
+	// Make sure the date is set properly
+	time_t temp = time(NULL); 
+  struct tm *tick_time = localtime(&temp);
+	
+	current_workout.day = tick_time->tm_mday;
+	current_workout.month = tick_time->tm_mon;
+	current_workout.year = tick_time->tm_year + 1900;
 	
 	current_exercise_index = 0;
 	timer_count = 0;
@@ -213,10 +220,17 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 	else
 		failed_set = false;
 	
+	// If we've finished deadlifts, then just change the current_set_index and call it a day
+	if(current_workout.day_type && current_exercise_index == 2)
+		current_set_index = 4;
+	
 	if(++current_set_index == 5){
 		// This runs if we've completed an exercise
 		current_set_index = 0;
 		failed_set = false;
+		timer_running = false;
+		timer_count = 0;
+		text_layer_set_text(motivation, "");
 		
 		if(++current_exercise_index == 3){
 			// This runs if we've completed the workout
@@ -229,14 +243,21 @@ void workout_window_single_select_click(ClickRecognizerRef recognizer, void *con
 			update_weight_text();
 			update_rep_text();
 		}
+	} else {
+		// This runs if we just moved sets
+		update_motivation_text();
 	}
 	
 	update_timer();
 	update_working_set_inverter_layer();
-	update_motivation_text();
 }
 
 void workout_window_single_back_click(ClickRecognizerRef recognizer, void *context){
+	
+	// If we were on deadlifts, then just reset the current_set_index and call it a day
+	if(current_workout.day_type && current_exercise_index == 2)
+		current_set_index = 0;
+	
 	if(--current_set_index < 0){
 		// This runs if we are going back from an exercise
 		
@@ -344,6 +365,23 @@ const char * get_exercise_text(){
 }
 
 void update_exercise_text(){
+	// If it's currently a B day and we're working on deadlifts, we need to do some things
+	if(current_workout.day_type && current_exercise_index == 2){
+		current_set_index = 2; // First we will need to indicate that the current working set is 2
+		
+		// Set all the sets text layers to be empty
+		text_layer_set_text(sets[0], " ");
+		text_layer_set_text(sets[1], " ");
+		text_layer_set_text(sets[3], " ");
+		text_layer_set_text(sets[4], " ");
+	} else {
+		// Get the old values of this exercise and show them
+		for(int i = 0; i < 5; i++){
+			snprintf(set_buffers[i], sizeof(set_buffers[i]), "%i", get_current_exercise().reps[i]);
+			text_layer_set_text(sets[i], set_buffers[i]);
+		}
+	}
+	
 	text_layer_set_text(current_exercise_layer, get_exercise_text());
 }
 
@@ -365,11 +403,12 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	if(timer_running){
 		timer_count++;
 		update_timer();
+		
+		if(timer_count % 90 == 0 || timer_count % 100 == 0 || timer_count == 999)
+			update_motivation_text();
 	}
-	
-	if(timer_count % 90 == 0 || timer_count % 100 == 0 || timer_count == 999)
-		update_motivation_text();
 }
+
 void update_timer(){
 	// Create a little buffer
 	static char buffer[] = "00:00";
