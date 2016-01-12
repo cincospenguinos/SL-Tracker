@@ -3,7 +3,7 @@ An app for the Pebble Smartwatch that keeps track of your workouts when followin
 
 ## NOTE
 
-The version of SL-Tracker shown in the repository is old. It contains a lot of code and things I didn't like, and ultimately I decided to abandon. The most updated version of this project is located [here](http://)
+The version of SL-Tracker shown in the repository is old. It contains a lot of code and things I didn't like, and ultimately I decided to abandon. The most updated version of this project is located [here](https://github.com/cincospenguinos/SLTracker)
 
 ### Disclaimer
 
